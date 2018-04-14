@@ -156,9 +156,9 @@
       
         <tags>
             
-            <tag> Kafka </tag>
-            
             <tag> 集群 </tag>
+            
+            <tag> Kafka </tag>
             
         </tags>
       
@@ -186,9 +186,9 @@
       
         <tags>
             
-            <tag> 集群 </tag>
-            
             <tag> zookeeper </tag>
+            
+            <tag> 集群 </tag>
             
         </tags>
       
