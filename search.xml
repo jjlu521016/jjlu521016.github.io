@@ -3,6 +3,20 @@
   
     
     <entry>
+      <title>mysql常用SQL</title>
+      <link href="/2018/04/14/DB/mysql%E5%B8%B8%E7%94%A8SQL.html"/>
+      <content type="html"><![CDATA[<h3 id="1-查询一段时间内的数据："><a href="#1-查询一段时间内的数据：" class="headerlink" title="1. 查询一段时间内的数据："></a>1. 查询一段时间内的数据：</h3><p> 查询一天：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">table</span> <span class="keyword">where</span> <span class="keyword">to_days</span>(column_time) = <span class="keyword">to_days</span>(<span class="keyword">now</span>());</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">table</span> <span class="keyword">where</span> <span class="built_in">date</span>(column_time) = <span class="keyword">curdate</span>();</span><br></pre></td></tr></table></figure></p><p>查询一周：<br><a id="more"></a><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">table</span>   <span class="keyword">where</span> <span class="keyword">DATE_SUB</span>(<span class="keyword">CURDATE</span>(), <span class="built_in">INTERVAL</span> <span class="number">7</span> <span class="keyword">DAY</span>) &lt;= <span class="built_in">date</span>(column_time);</span><br></pre></td></tr></table></figure></p><p>查询一个月：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">table</span> <span class="keyword">where</span> <span class="keyword">DATE_SUB</span>(<span class="keyword">CURDATE</span>(), <span class="built_in">INTERVAL</span> <span class="number">1</span> <span class="keyword">MONTH</span>) &lt;= <span class="built_in">date</span>(column_time);</span><br></pre></td></tr></table></figure></p><p>更新待续……</p>]]></content>
+      
+      
+        <tags>
+            
+            <tag> mysql </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>读写自旋锁</title>
       <link href="/2018/03/29/%E8%AF%BB%E5%86%99%E8%87%AA%E6%97%8B%E9%94%81.html"/>
       <content type="html"><![CDATA[]]></content>
