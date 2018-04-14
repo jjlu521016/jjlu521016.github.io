@@ -3116,7 +3116,7 @@ function renderFooter() {
   var container = document.createElement('div');
   container.lang = "en-US";
   container.className = 'gitment-container gitment-footer-container';
-  container.innerHTML = ' · <a href="https://billts.site">JasonLu</a> 汉化 ';
+  container.innerHTML = ' · <a href="https://github.com/jjlu521016">JasonLu</a> 汉化 ';
   return container;
 }
 
