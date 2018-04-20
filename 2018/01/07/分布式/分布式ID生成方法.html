@@ -19,7 +19,7 @@
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/3353177-636f805740d6e8a3?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/3353177-fa2d8f85b4c683fe?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/3353177-2793ac877c56a982?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-03-08T05:06:44.147Z">
+<meta property="og:updated_time" content="2018-04-20T06:01:06.412Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="分布式ID生成方法">
 <meta name="twitter:description" content="1. 使用数据库的 auto_increment 来生成全局唯一递增ID优点：（1）简单，使用数据库已有的功能（2）能够保证唯一性（3）能够保证递增性（4）步长固定缺点：（1）可用性难以保证：数据库常见架构是一主多从+读写分离，生成自增ID是写请求，主库挂了就玩不转了（2）扩展性差，性能有上限：因为写入是单点，数据库主库的写性能决定ID的生成性能上限，并且难以扩展改进方法：（1）增加主库，避免写入">
@@ -178,6 +178,30 @@
 
     <!-- 目录内容 -->
 
+    <p class="show-toc-btn" id="show-toc-btn" onclick="showToc();" style="display:none">
+          <span class="btn-bg"></span>
+          <span class="btn-text">文章导航</span>
+          </p>
+	<div id="toc-article" class="toc-article">
+	    <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
+		<strong class="toc-title">文章目录</strong>
+           <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-使用数据库的-auto-increment-来生成全局唯一递增ID"><span class="toc-number">1.</span> <span class="toc-text">1. 使用数据库的 auto_increment 来生成全局唯一递增ID</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-取当前毫秒数"><span class="toc-number">2.</span> <span class="toc-text">4. 取当前毫秒数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-snowflake算法"><span class="toc-number">3.</span> <span class="toc-text">5. snowflake算法</span></a></li></ol>
+         </div>
+   <script type="text/javascript">
+	function showToc(){
+		var toc_article = document.getElementById("toc-article");
+		var show_toc_btn = document.getElementById("show-toc-btn");
+		toc_article.setAttribute("style","display:block");
+		show_toc_btn.setAttribute("style","display:none");
+		};
+	function showBtn(){
+		var toc_article = document.getElementById("toc-article");
+		var show_toc_btn = document.getElementById("show-toc-btn");
+		toc_article.setAttribute("style","display:none");
+		show_toc_btn.setAttribute("style","display:block");
+		};
+   </script>
+      
 <!-- 目录内容结束 -->
     <div class="article-entry" itemprop="articleBody">
       
@@ -189,7 +213,7 @@
 <p>如上图，对外提供的服务是主服务，有一个影子服务时刻处于备用状态，当主服务挂了的时候影子服务顶上。这个切换的过程对调用方是透明的，可以自动完成，常用的技术是vip+keepalived</p>
 <p>###3. uuid<br>上述方案来生成ID，虽然性能大增，但由于是单点系统，总还是存在性能上限的。同时，上述两种方案，不管是数据库还是服务来生成ID，业务方Application都需要进行一次远程调用，比较耗时。有没有一种本地生成ID的方法，即高性能，又时延低呢？<br>uuid是一种常见的方案：string ID =GenUUID();<br><strong>优点：</strong><br>（1）本地生成ID，不需要进行远程调用，时延低<br>（2）扩展性好，基本可以认为没有性能上限<br><strong>缺点：</strong><br>（1）<strong>无法保证趋势递增</strong><br>（2）uuid过长，往往用字符串表示，作为主键<strong>建立索引查询效率低</strong>，常见优化方案为“转化为两个uint64整数存储”或者“折半存储”（折半后不能保证唯一性）</p>
 <h3 id="4-取当前毫秒数"><a href="#4-取当前毫秒数" class="headerlink" title="4. 取当前毫秒数"></a>4. 取当前毫秒数</h3><p>uuid是一个本地算法，生成性能高，但无法保证趋势递增，且作为字符串ID检索效率低，有没有一种能保证递增的本地算法呢？<br>取当前毫秒数是一种常见方案：uint64 ID = GenTimeMS();<br><strong>优点：</strong><br>（1）本地生成ID，不需要进行远程调用，时延低<br>（2）生成的ID趋势递增<br>（3）生成的ID是整数，建立索引后查询效率高<br><strong>缺点：</strong><br>（1）<strong>如果并发量超过1000，会生成重复的ID</strong>。当然，使用微秒可以降低冲突概率，但每秒最多只能生成1000000个ID，再多的话就一定会冲突了，所以使用微秒并不从根本上解决问题。</p>
-<p>###5. snowflake算法<br>snowflake是twitter开源的分布式ID生成算法，其核心思想是：一个long型的ID，使用其中41bit作为毫秒数，10bit作为机器编号，12bit作为毫秒内序列号。这个算法单机<strong>每秒内理论上最多可以生成1000*(2^12)，也就是400W的ID</strong>，完全能满足业务的需求。</p>
+<h3 id="5-snowflake算法"><a href="#5-snowflake算法" class="headerlink" title="5. snowflake算法"></a>5. snowflake算法</h3><p>snowflake是twitter开源的分布式ID生成算法，其核心思想是：一个long型的ID，使用其中41bit作为毫秒数，10bit作为机器编号，12bit作为毫秒内序列号。这个算法单机<strong>每秒内理论上最多可以生成1000*(2^12)，也就是400W的ID</strong>，完全能满足业务的需求。</p>
 
       
 
@@ -335,6 +359,19 @@
         </div>
         
         
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-使用数据库的-auto-increment-来生成全局唯一递增ID"><span class="toc-number">1.</span> <span class="toc-text">1. 使用数据库的 auto_increment 来生成全局唯一递增ID</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-取当前毫秒数"><span class="toc-number">2.</span> <span class="toc-text">4. 取当前毫秒数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-snowflake算法"><span class="toc-number">3.</span> <span class="toc-text">5. snowflake算法</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
+        
     </div>
 </aside>
 
@@ -459,11 +496,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">dubbo</a>
+                <a href="javascript:void(0)" class="js-tag color3">mybatis</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">exception</a>
+                <a href="javascript:void(0)" class="js-tag color3">源码</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -471,7 +516,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">源码</a>
+                <a href="javascript:void(0)" class="js-tag color5">exception</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">dubbo</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">spring</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -487,43 +540,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">spring</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">hashmap</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">jvm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">jmap</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">mybatis</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">jedis</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">jquery</a>
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -535,11 +556,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">hashmap</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">分布式ID</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Kafka</a>
+                <a href="javascript:void(0)" class="js-tag color4">jvm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">jmap</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -547,11 +580,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">运维</a>
+                <a href="javascript:void(0)" class="js-tag color1">Kafka</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+                <a href="javascript:void(0)" class="js-tag color2">jquery</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">运维</a>
               </li>
             
             <div class="clearfix"></div>
