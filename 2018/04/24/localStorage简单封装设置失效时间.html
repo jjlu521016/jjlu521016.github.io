@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://jjlu521016.github.io">
-  <title>LJS: 2017/12 | jjlu521016</title>
+  <title>localStorage简单封装设置失效时间 | jjlu521016</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="jjlu521016">
-<meta property="og:url" content="https://jjlu521016.github.io/archives/2017/12/index.html">
+  <meta name="description" content="1.概述：在客户端存储数据HTML5 提供了两种在客户端存储数据的新方法：  localStorage - 没有时间限制的数据存储 sessionStorage - 针对一个 session 的数据存储  localStorage和cookie 的区别不详细对比，但是localStorage存储数据的时候有一点需要我们注意的。">
+<meta name="keywords" content="localStorage">
+<meta property="og:type" content="article">
+<meta property="og:title" content="localStorage简单封装设置失效时间">
+<meta property="og:url" content="https://jjlu521016.github.io/2018/04/24/localStorage简单封装设置失效时间.html">
 <meta property="og:site_name" content="jjlu521016">
+<meta property="og:description" content="1.概述：在客户端存储数据HTML5 提供了两种在客户端存储数据的新方法：  localStorage - 没有时间限制的数据存储 sessionStorage - 针对一个 session 的数据存储  localStorage和cookie 的区别不详细对比，但是localStorage存储数据的时候有一点需要我们注意的。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-04-24T01:34:53.419Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="jjlu521016">
+<meta name="twitter:title" content="localStorage简单封装设置失效时间">
+<meta name="twitter:description" content="1.概述：在客户端存储数据HTML5 提供了两种在客户端存储数据的新方法：  localStorage - 没有时间限制的数据存储 sessionStorage - 针对一个 session 的数据存储  localStorage和cookie 的区别不详细对比，但是localStorage存储数据的时候有一点需要我们注意的。">
   
   
     <link rel="icon" href="/favicon.png">
@@ -148,135 +153,246 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-localStorage简单封装设置失效时间" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      localStorage简单封装设置失效时间
+    </h1>
+  
+
+        
+        <a href="/2018/04/24/localStorage简单封装设置失效时间.html" class="archive-article-date">
+  	<time datetime="2018-04-24T01:30:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-24</time>
+</a>
+        
+      </header>
     
+
+    <!-- 目录内容 -->
+
+    <p class="show-toc-btn" id="show-toc-btn" onclick="showToc();" style="display:none">
+          <span class="btn-bg"></span>
+          <span class="btn-text">文章导航</span>
+          </p>
+	<div id="toc-article" class="toc-article">
+	    <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
+		<strong class="toc-title">文章目录</strong>
+           <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-概述："><span class="toc-number">1.</span> <span class="toc-text">1.概述：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-场景："><span class="toc-number">2.</span> <span class="toc-text">2.场景：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-实现："><span class="toc-number">3.</span> <span class="toc-text">3.实现：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-使用实例"><span class="toc-number">3.1.</span> <span class="toc-text">4.使用实例</span></a></li></ol></li></ol>
+         </div>
+   <script type="text/javascript">
+	function showToc(){
+		var toc_article = document.getElementById("toc-article");
+		var show_toc_btn = document.getElementById("show-toc-btn");
+		toc_article.setAttribute("style","display:block");
+		show_toc_btn.setAttribute("style","display:none");
+		};
+	function showBtn(){
+		var toc_article = document.getElementById("toc-article");
+		var show_toc_btn = document.getElementById("show-toc-btn");
+		toc_article.setAttribute("style","display:none");
+		show_toc_btn.setAttribute("style","display:block");
+		};
+   </script>
+      
+<!-- 目录内容结束 -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-概述："><a href="#1-概述：" class="headerlink" title="1.概述："></a>1.概述：</h3><p>在客户端存储数据<br>HTML5 提供了两种在客户端存储数据的新方法：</p>
+<ul>
+<li>localStorage - 没有时间限制的数据存储</li>
+<li>sessionStorage - 针对一个 session 的数据存储</li>
+</ul>
+<p>localStorage和cookie 的区别不详细对比，但是localStorage存储数据的时候有一点需要我们注意的。<br><a id="more"></a></p>
+<h3 id="2-场景："><a href="#2-场景：" class="headerlink" title="2.场景："></a>2.场景：</h3><p>我们前端需要调用第三方api异步获取我们的数据A（短时间内数据都一样）,然后我们拿到数据A来进行其他操作。试想下从获取数据A再到用数据A获取我么想要的最终结果，这段时间对用户来说是很漫长了！<br>其实我们可以使用</p>
+<ul>
+<li>Cookie来存储数据，但是Cookie存储的数据有限制。</li>
+<li>使用localStorage能满足存储数据的条件，但是它却没有失效时间。<br>那我们改怎么优化这种场景呢？</li>
+</ul>
+<p>综上所述，Cookie已经无法满足我们的要求了，那么我们就从localStorage入手吧。既然localStorage没有失效时间，我们就封装下使其满足我们的需求。</p>
+<h3 id="3-实现："><a href="#3-实现：" class="headerlink" title="3.实现："></a>3.实现：</h3><p>下面的代码仅供参考：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> storageUtil = &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * @param key</span></span><br><span class="line"><span class="comment">     * @param data</span></span><br><span class="line"><span class="comment">     * @param time 失效时间（秒）,默认一周</span></span><br><span class="line"><span class="comment">     * @returns &#123;boolean&#125;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    put: <span class="function"><span class="keyword">function</span> (<span class="params">key, data, time</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (!localStorage) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (!time || <span class="built_in">isNaN</span>(time)) &#123;</span><br><span class="line">                time = <span class="number">60</span>*<span class="number">60</span>*<span class="number">24</span>*<span class="number">7</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">var</span> cacheExpireDate = (<span class="keyword">new</span> <span class="built_in">Date</span>() - <span class="number">1</span>) + time * <span class="number">1000</span>;</span><br><span class="line">            <span class="keyword">var</span> cacheVal = &#123;<span class="attr">val</span>: data, <span class="attr">exp</span>: cacheExpireDate&#125;;</span><br><span class="line">            localStorage.setItem(key, <span class="built_in">JSON</span>.stringify(cacheVal));<span class="comment">//存入缓存值</span></span><br><span class="line">        &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    get: <span class="function"><span class="keyword">function</span> (<span class="params">key</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (!localStorage) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">var</span> cacheVal = localStorage.getItem(key);</span><br><span class="line">            <span class="keyword">var</span> result = <span class="built_in">JSON</span>.parse(cacheVal);</span><br><span class="line">            <span class="keyword">var</span> now = <span class="keyword">new</span> <span class="built_in">Date</span>() - <span class="number">1</span>;</span><br><span class="line">            <span class="comment">//缓存不存在</span></span><br><span class="line">            <span class="keyword">if</span> (!result) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//缓存过期</span></span><br><span class="line">            <span class="keyword">if</span> (now &gt; result.exp) &#123;</span><br><span class="line">                <span class="keyword">this</span>.remove(key);</span><br><span class="line">                <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> result.val;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">            <span class="keyword">this</span>.remove(key);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    remove: <span class="function"><span class="keyword">function</span> (<span class="params">key</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!localStorage) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        localStorage.removeItem(key);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="4-使用实例"><a href="#4-使用实例" class="headerlink" title="4.使用实例"></a>4.使用实例</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">storageUtil.put(<span class="string">"aa"</span>,<span class="built_in">JSON</span>.stringify(data));</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> cacheData = storageUtil.get(<span class="string">"aa"</span>);</span><br><span class="line"><span class="keyword">if</span>(cacheData !== <span class="literal">null</span> || cacheData !== <span class="string">''</span>)&#123;</span><br><span class="line">    </span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢您的打赏！！<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/image/alipay.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/image/wechat.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/12/30/java/转载-关于垃圾回收被误解的-7-件事.html" class="archive-article-date">
-  	<time datetime="2017-12-30T08:43:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-12-30</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/12/30/java/转载-关于垃圾回收被误解的-7-件事.html">[转载]关于垃圾回收被误解的 7 件事</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">JVM</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">localStorage</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://jjlu521016.github.io/2018/04/24/localStorage简单封装设置失效时间.html" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/12/30/java/hashmap为什么在发生hash冲突后把元素放在链表的头部？.html" class="archive-article-date">
-  	<time datetime="2017-12-30T08:38:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-12-30</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2018/04/19/java/jmap命令使用.html" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">jmap命令使用</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/12/30/java/hashmap为什么在发生hash冲突后把元素放在链表的头部？.html">hashmap为什么在发生hash冲突后把元素放在链表的头部？</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">hashmap</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-概述："><span class="toc-number">1.</span> <span class="toc-text">1.概述：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-场景："><span class="toc-number">2.</span> <span class="toc-text">2.场景：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-实现："><span class="toc-number">3.</span> <span class="toc-text">3.实现：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-使用实例"><span class="toc-number">3.1.</span> <span class="toc-text">4.使用实例</span></a></li></ol></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+    </div>
+</aside>
+
+
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/12/30/DB/一次线上数据库添加字段造成磁盘不够的问题.html" class="archive-article-date">
-  	<time datetime="2017-12-30T08:14:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-12-30</time>
-</a>
-        </div>
-    	 
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/12/30/DB/一次线上数据库添加字段造成磁盘不够的问题.html">一次线上数据库添加字段造成磁盘不够的问题</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Mysql</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
+  
+
+  
+  <div id="gitment-ctn"></div> 
+<link rel="stylesheet" href="https://billts.site/extra_css/gitment.css">
+<script src="/./gitment.js"></script>
+<script>
+var gitment = new Gitment({
+  id: 'Tue Apr 24 2018 09:30:09 GMT+0800',
+  owner: 'jjlu521016',
+  repo: 'jjlu521016.github.io',
+  oauth: {
+    client_id: 'd8527a9b07d5811879a8',
+    client_secret: 'db142a6624b2422afa80827103b630a0cb282d32',
+  },
+})
+gitment.render('gitment-ctn')
+</script>
+  
 
 
           </div>
@@ -301,8 +417,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
