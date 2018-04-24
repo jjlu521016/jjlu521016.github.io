@@ -6,20 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://jjlu521016.github.io">
-  <title>Kafka集群搭建步骤 | jjlu521016</title>
+  <title>localStorage简单封装设置失效时间 | jjlu521016</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1. 下载kafka(scale编译版本不同，有不同的选择)123456wget https://www.apache.org/dyn/closer.cgi?path=/kafka/1.0.0/kafka_2.11-1.0.0.tgz### 解压tar zxvf kafka_2.11-1.0.0.tgz### 切换到kafka目录创建日志目录cd kafka_2.11-1.0.0mkdir log">
-<meta name="keywords" content="Kafka,集群">
+  <meta name="description" content="1.概述：在客户端存储数据HTML5 提供了两种在客户端存储数据的新方法：  localStorage - 没有时间限制的数据存储 sessionStorage - 针对一个 session 的数据存储  localStorage和cookie 的区别不详细对比，但是localStorage存储数据的时候有一点需要我们注意的。">
+<meta name="keywords" content="localStorage">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kafka集群搭建步骤">
-<meta property="og:url" content="https://jjlu521016.github.io/2018/01/12/运维/Kafka集群搭建步骤.html">
+<meta property="og:title" content="localStorage简单封装设置失效时间">
+<meta property="og:url" content="https://jjlu521016.github.io/2018/04/24/js/localStorage简单封装设置失效时间.html">
 <meta property="og:site_name" content="jjlu521016">
-<meta property="og:description" content="1. 下载kafka(scale编译版本不同，有不同的选择)123456wget https://www.apache.org/dyn/closer.cgi?path=/kafka/1.0.0/kafka_2.11-1.0.0.tgz### 解压tar zxvf kafka_2.11-1.0.0.tgz### 切换到kafka目录创建日志目录cd kafka_2.11-1.0.0mkdir log">
+<meta property="og:description" content="1.概述：在客户端存储数据HTML5 提供了两种在客户端存储数据的新方法：  localStorage - 没有时间限制的数据存储 sessionStorage - 针对一个 session 的数据存储  localStorage和cookie 的区别不详细对比，但是localStorage存储数据的时候有一点需要我们注意的。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-08T09:14:17.524Z">
+<meta property="og:updated_time" content="2018-04-24T01:36:45.635Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Kafka集群搭建步骤">
-<meta name="twitter:description" content="1. 下载kafka(scale编译版本不同，有不同的选择)123456wget https://www.apache.org/dyn/closer.cgi?path=/kafka/1.0.0/kafka_2.11-1.0.0.tgz### 解压tar zxvf kafka_2.11-1.0.0.tgz### 切换到kafka目录创建日志目录cd kafka_2.11-1.0.0mkdir log">
+<meta name="twitter:title" content="localStorage简单封装设置失效时间">
+<meta name="twitter:description" content="1.概述：在客户端存储数据HTML5 提供了两种在客户端存储数据的新方法：  localStorage - 没有时间限制的数据存储 sessionStorage - 针对一个 session 的数据存储  localStorage和cookie 的区别不详细对比，但是localStorage存储数据的时候有一点需要我们注意的。">
   
   
     <link rel="icon" href="/favicon.png">
@@ -153,20 +153,20 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-运维/Kafka集群搭建步骤" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-js/localStorage简单封装设置失效时间" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Kafka集群搭建步骤
+      localStorage简单封装设置失效时间
     </h1>
   
 
         
-        <a href="/2018/01/12/运维/Kafka集群搭建步骤.html" class="archive-article-date">
-  	<time datetime="2018-01-12T04:05:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-12</time>
+        <a href="/2018/04/24/js/localStorage简单封装设置失效时间.html" class="archive-article-date">
+  	<time datetime="2018-04-24T01:30:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-24</time>
 </a>
         
       </header>
@@ -181,7 +181,7 @@
 	<div id="toc-article" class="toc-article">
 	    <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
 		<strong class="toc-title">文章目录</strong>
-           <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-下载kafka-scale编译版本不同，有不同的选择"><span class="toc-number">1.</span> <span class="toc-text">1. 下载kafka(scale编译版本不同，有不同的选择)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-配置server-properties"><span class="toc-number">2.</span> <span class="toc-text">2. 配置server.properties</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-启动Kafka集群并测试（zk开启）"><span class="toc-number">3.</span> <span class="toc-text">3. 启动Kafka集群并测试（zk开启）</span></a></li></ol>
+           <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-概述："><span class="toc-number">1.</span> <span class="toc-text">1.概述：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-场景："><span class="toc-number">2.</span> <span class="toc-text">2.场景：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-实现："><span class="toc-number">3.</span> <span class="toc-text">3.实现：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-使用实例"><span class="toc-number">4.</span> <span class="toc-text">4.使用实例</span></a></li></ol>
          </div>
    <script type="text/javascript">
 	function showToc(){
@@ -201,23 +201,20 @@
 <!-- 目录内容结束 -->
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="1-下载kafka-scale编译版本不同，有不同的选择"><a href="#1-下载kafka-scale编译版本不同，有不同的选择" class="headerlink" title="1. 下载kafka(scale编译版本不同，有不同的选择)"></a>1. 下载kafka(scale编译版本不同，有不同的选择)</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">wget https://www.apache.org/dyn/closer.cgi?path=/kafka/1.0.0/kafka_2.11-1.0.0.tgz</span><br><span class="line"><span class="comment">### 解压</span></span><br><span class="line">tar zxvf kafka_2.11-1.0.0.tgz</span><br><span class="line"><span class="comment">### 切换到kafka目录创建日志目录</span></span><br><span class="line"><span class="built_in">cd</span> kafka_2.11-1.0.0</span><br><span class="line">mkdir logs</span><br></pre></td></tr></table></figure>
-<a id="more"></a>
-<h3 id="2-配置server-properties"><a href="#2-配置server-properties" class="headerlink" title="2. 配置server.properties"></a>2. 配置<code>server.properties</code></h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> config</span><br><span class="line">vi server.properties</span><br></pre></td></tr></table></figure>
-<p>修改配置文件(按需修改)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"># 当前机器在集群中的唯一标识，和zookeeper的myid性质一样</span><br><span class="line">broker.id=0  </span><br><span class="line"># 当前kafka对外提供服务的端口默认是9092</span><br><span class="line"># port=9092 </span><br><span class="line"># 参数默认是关闭的，在0.8.1有个bug，DNS解析问题，失败率的问题。</span><br><span class="line"># host.name=192.168.188.111 </span><br><span class="line">listeners=PLAINTEXT://192.168.188.111:9092</span><br><span class="line"># borker进行网络处理的线程数</span><br><span class="line">num.network.threads=3 </span><br><span class="line"># borker进行I/O处理的线程数</span><br><span class="line">num.io.threads=8 </span><br><span class="line"># 消息存放的目录，这个目录可以配置为“，”逗号分割的表达式，上面的num.io.threads要大于这个目录的个数这个目录，如果配置多个目录，新创建的topic他把消息持久化的地方是，当前以逗号分割的目录中，那个分区数最少就放那一个</span><br><span class="line">log.dirs=/opt/microServer/kafka_2.11-1.0.0/logs</span><br><span class="line"># 发送缓冲区buffer大小，数据不是一下子就发送的，先回存储到缓冲区了到达一定的大小后在发送，能提高性能</span><br><span class="line">socket.send.buffer.bytes=102400 </span><br><span class="line"># kafka接收缓冲区大小，当数据到达一定大小后在序列化到磁盘</span><br><span class="line">socket.receive.buffer.bytes=102400 </span><br><span class="line"> # 向kafka请求消息或者向kafka发送消息的请请求的最大数，这个值不能超过java的堆栈大小</span><br><span class="line">socket.request.max.bytes=104857600</span><br><span class="line"># 默认的分区数，一个topic默认1个分区数</span><br><span class="line">num.partitions=1</span><br><span class="line"># 默认消息的最大持久化时间，168小时，7天</span><br><span class="line">log.retention.hours=168</span><br><span class="line"># 消息保存的最大值5M</span><br><span class="line">message.max.byte=5242880  </span><br><span class="line"># kafka保存消息的副本数，如果一个副本失效了，另一个还可以继续提供服务</span><br><span class="line">default.replication.factor=2 </span><br><span class="line"># 取消息的最大直接数 </span><br><span class="line">replica.fetch.max.bytes=5242880  </span><br><span class="line"># kafka的消息是以追加的形式落地到文件，当超过这个值的时候，kafka会新起一个文件</span><br><span class="line">log.segment.bytes=1073741824 </span><br><span class="line"># 每隔300000毫秒去检查上面配置的log失效时间（log.retention.hours=168 ），到目录查看是否有过期的消息如果有，删除</span><br><span class="line">log.retention.check.interval.ms=300000 </span><br><span class="line"># 是否启用log压缩，一般不用启用，启用的话可以提高性能</span><br><span class="line">log.cleaner.enable=false</span><br><span class="line"># 设置zookeeper的连接端口</span><br><span class="line">zookeeper.connect=192.168.188.111:2181,192.168.188.112:2181,192.168.188.113:2181</span><br></pre></td></tr></table></figure></p>
-<h3 id="3-启动Kafka集群并测试（zk开启）"><a href="#3-启动Kafka集群并测试（zk开启）" class="headerlink" title="3. 启动Kafka集群并测试（zk开启）"></a>3. 启动Kafka集群并测试（zk开启）</h3><ul>
-<li><p>启动服务</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">进入kafka bin目录</span><br><span class="line"><span class="comment">##后台守护启动</span></span><br><span class="line">bin]<span class="comment"># ./kafka-server-start.sh -daemon ../config/server.properties</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>检查服务是否启动</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># jps</span></span><br><span class="line">2241 QuorumPeerMain</span><br><span class="line">3236 Jps</span><br><span class="line">3100 Kafka</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>创建Topic来验证是否创建成功</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">bin]<span class="comment"># ./kafka-topics.sh --create --zookeeper 192.168.188.112:2181 --replication-factor 2 --partitions 1 --topic test</span></span><br><span class="line"><span class="comment">#创建一个broker，发布者</span></span><br><span class="line">bin]<span class="comment"># ./kafka-console-producer.sh --broker-list 192.168.188.112:9092 --topic test2</span></span><br><span class="line"><span class="string">''</span><span class="string">'在一台服务器上创建一个订阅者'</span><span class="string">''</span></span><br><span class="line">bin]<span class="comment"># ./kafka-console-consumer.sh --zookeeper 192.168.188.112:2181 --topic test2 --from-beginning</span></span><br></pre></td></tr></table></figure>
-</li>
+        <h3 id="1-概述："><a href="#1-概述：" class="headerlink" title="1.概述："></a>1.概述：</h3><p>在客户端存储数据<br>HTML5 提供了两种在客户端存储数据的新方法：</p>
+<ul>
+<li>localStorage - 没有时间限制的数据存储</li>
+<li>sessionStorage - 针对一个 session 的数据存储</li>
 </ul>
-<p>测试结果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">## server1</span><br><span class="line">bin]# ./kafka-console-producer.sh --broker-list 192.168.188.112:9092 --topic test2</span><br><span class="line">&gt;werwe</span><br><span class="line">&gt;hahaha</span><br><span class="line">&gt;</span><br><span class="line"></span><br><span class="line">##server2 </span><br><span class="line">bin]# ./kafka-console-consumer.sh --zookeeper 192.168.188.112:2181 --topic test2 --from-beginning</span><br><span class="line">Using the ConsoleConsumer with old consumer is deprecated and will be removed in a future major release. Consider using the new consumer by passing [bootstrap-server] instead of [zookeeper].</span><br><span class="line">werwe</span><br><span class="line">hahaha</span><br></pre></td></tr></table></figure></p>
-
+<p>localStorage和cookie 的区别不详细对比，但是localStorage存储数据的时候有一点需要我们注意的。<br><a id="more"></a></p>
+<h3 id="2-场景："><a href="#2-场景：" class="headerlink" title="2.场景："></a>2.场景：</h3><p>我们前端需要调用第三方api异步获取我们的数据A（短时间内数据都一样）,然后我们拿到数据A来进行其他操作。试想下从获取数据A再到用数据A获取我么想要的最终结果，这段时间对用户来说是很漫长了！<br>其实我们可以使用</p>
+<ul>
+<li>Cookie来存储数据，但是Cookie存储的数据有限制。</li>
+<li>使用localStorage能满足存储数据的条件，但是它却没有失效时间。<br>那我们改怎么优化这种场景呢？</li>
+</ul>
+<p>综上所述，Cookie已经无法满足我们的要求了，那么我们就从localStorage入手吧。既然localStorage没有失效时间，我们就封装下使其满足我们的需求。</p>
+<h3 id="3-实现："><a href="#3-实现：" class="headerlink" title="3.实现："></a>3.实现：</h3><p>下面的代码仅供参考：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> storageUtil = &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * @param key</span></span><br><span class="line"><span class="comment">     * @param data</span></span><br><span class="line"><span class="comment">     * @param time 失效时间（秒）,默认一周</span></span><br><span class="line"><span class="comment">     * @returns &#123;boolean&#125;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    put: <span class="function"><span class="keyword">function</span> (<span class="params">key, data, time</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (!localStorage) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (!time || <span class="built_in">isNaN</span>(time)) &#123;</span><br><span class="line">                time = <span class="number">60</span>*<span class="number">60</span>*<span class="number">24</span>*<span class="number">7</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">var</span> cacheExpireDate = (<span class="keyword">new</span> <span class="built_in">Date</span>() - <span class="number">1</span>) + time * <span class="number">1000</span>;</span><br><span class="line">            <span class="keyword">var</span> cacheVal = &#123;<span class="attr">val</span>: data, <span class="attr">exp</span>: cacheExpireDate&#125;;</span><br><span class="line">            localStorage.setItem(key, <span class="built_in">JSON</span>.stringify(cacheVal));<span class="comment">//存入缓存值</span></span><br><span class="line">        &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    get: <span class="function"><span class="keyword">function</span> (<span class="params">key</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (!localStorage) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">var</span> cacheVal = localStorage.getItem(key);</span><br><span class="line">            <span class="keyword">var</span> result = <span class="built_in">JSON</span>.parse(cacheVal);</span><br><span class="line">            <span class="keyword">var</span> now = <span class="keyword">new</span> <span class="built_in">Date</span>() - <span class="number">1</span>;</span><br><span class="line">            <span class="comment">//缓存不存在</span></span><br><span class="line">            <span class="keyword">if</span> (!result) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//缓存过期</span></span><br><span class="line">            <span class="keyword">if</span> (now &gt; result.exp) &#123;</span><br><span class="line">                <span class="keyword">this</span>.remove(key);</span><br><span class="line">                <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> result.val;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">            <span class="keyword">this</span>.remove(key);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    remove: <span class="function"><span class="keyword">function</span> (<span class="params">key</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!localStorage) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        localStorage.removeItem(key);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="4-使用实例"><a href="#4-使用实例" class="headerlink" title="4.使用实例"></a>4.使用实例</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">storageUtil.put(<span class="string">"aa"</span>,<span class="built_in">JSON</span>.stringify(data));</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> cacheData = storageUtil.get(<span class="string">"aa"</span>);</span><br><span class="line"><span class="keyword">if</span>(cacheData !== <span class="literal">null</span> || cacheData !== <span class="string">''</span>)&#123;</span><br><span class="line">    </span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
 
       
@@ -261,11 +258,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Kafka</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">集群</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">localStorage</a>
         		</li>
       		
 		</ul>
@@ -321,7 +314,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://jjlu521016.github.io/2018/01/12/运维/Kafka集群搭建步骤.html" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://jjlu521016.github.io/2018/04/24/js/localStorage简单封装设置失效时间.html" alt="微信分享二维码">
     </div>
 </div>
 
@@ -335,18 +328,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/01/15/java/jvm参数配置笔记.html" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          jvm参数配置笔记
-        
-      </div>
-    </a>
   
-  
-    <a href="/2018/01/07/分布式/分布式ID生成方法.html" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">分布式ID生成方法</div>
+    <a href="/2018/04/19/java/jmap命令使用.html" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">jmap命令使用</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -373,7 +357,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-下载kafka-scale编译版本不同，有不同的选择"><span class="toc-number">1.</span> <span class="toc-text">1. 下载kafka(scale编译版本不同，有不同的选择)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-配置server-properties"><span class="toc-number">2.</span> <span class="toc-text">2. 配置server.properties</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-启动Kafka集群并测试（zk开启）"><span class="toc-number">3.</span> <span class="toc-text">3. 启动Kafka集群并测试（zk开启）</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-概述："><span class="toc-number">1.</span> <span class="toc-text">1.概述：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-场景："><span class="toc-number">2.</span> <span class="toc-text">2.场景：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-实现："><span class="toc-number">3.</span> <span class="toc-text">3.实现：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-使用实例"><span class="toc-number">4.</span> <span class="toc-text">4.使用实例</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -398,7 +382,7 @@
 <script src="/./gitment.js"></script>
 <script>
 var gitment = new Gitment({
-  id: 'Fri Jan 12 2018 12:05:51 GMT+0800',
+  id: 'Tue Apr 24 2018 09:30:09 GMT+0800',
   owner: 'jjlu521016',
   repo: 'jjlu521016.github.io',
   oauth: {
