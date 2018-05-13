@@ -157,7 +157,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/09/运维/ELK-filebeat-kafka-zooKeeper搭建.html">ELK+filebeat+kafka+zooKeeper搭建</a>
+      <a class="article-title" href="/2018/05/09/运维/ELK-filebeat-kafka-zooKeeper搭建.html">ELK+filebeat+kafka+zooKeeper搭建（单机版）</a>
     </h1>
   
 
@@ -175,8 +175,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>本教程中使用的<code>ELK和filebeat</code>版本是 <code>6.2.4</code></p>
-<h3 id="1-下载"><a href="#1-下载" class="headerlink" title="1.下载"></a>1.下载</h3><p>到此页面下载对应的软件包<br><a href="https://www.elastic.co/cn/products" target="_blank" rel="noopener">https://www.elastic.co/cn/products</a></p>
-<h3 id="2-安装"><a href="#2-安装" class="headerlink" title="2. 安装"></a>2. 安装</h3><p>(本教程es安装路径是<code>/opt/elk</code>)<br>
+<h2 id="1-elk安装"><a href="#1-elk安装" class="headerlink" title="1. elk安装"></a>1. elk安装</h2><p>关于elk的配置参考我之前的一篇文章，不在累述：<br>elk安装地址：<br><a href="https://jjlu521016.github.io/2018/05/01/springboot-logback-log4j-elk.html#2-elk%E9%85%8D%E7%BD%AE">https://jjlu521016.github.io/2018/05/01/springboot-logback-log4j-elk.html#2-elk%E9%85%8D%E7%BD%AE</a><br>
         
           <a class="article-more-a" href="/2018/05/09/运维/ELK-filebeat-kafka-zooKeeper搭建.html#more">阅读全文 >></a>
         
@@ -1014,31 +1013,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">localStorage</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">dubbo</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">jquery</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">源码</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Mybatis</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">springboot</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">exception</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1050,6 +1025,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Mybatis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">exception</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">dubbo</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">spring</a>
               </li>
              
@@ -1058,7 +1045,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+                <a href="javascript:void(0)" class="js-tag color1">springboot</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1070,15 +1057,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">jedis</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">mybatis</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1094,11 +1081,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">分布式ID</a>
+                <a href="javascript:void(0)" class="js-tag color3">localStorage</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ELK</a>
+                <a href="javascript:void(0)" class="js-tag color2">jquery</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1107,6 +1098,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">集群</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ELK</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">分布式ID</a>
               </li>
              
               <li class="article-tag-list-item">

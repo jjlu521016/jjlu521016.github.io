@@ -6,20 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://jjlu521016.github.io">
-  <title>ELK+filebeat+kafka+zooKeeper搭建 | jjlu521016</title>
+  <title>ELK+filebeat+kafka+zooKeeper搭建（单机版） | jjlu521016</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="本教程中使用的ELK和filebeat版本是 6.2.4 1.下载到此页面下载对应的软件包https://www.elastic.co/cn/products 2. 安装(本教程es安装路径是/opt/elk)">
+  <meta name="description" content="本教程中使用的ELK和filebeat版本是 6.2.4 1. elk安装关于elk的配置参考我之前的一篇文章，不在累述：elk安装地址：https://jjlu521016.github.io/2018/05/01/springboot-logback-log4j-elk.html#2-elk%E9%85%8D%E7%BD%AE">
 <meta name="keywords" content="ELK">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ELK+filebeat+kafka+zooKeeper搭建">
+<meta property="og:title" content="ELK+filebeat+kafka+zooKeeper搭建（单机版）">
 <meta property="og:url" content="https://jjlu521016.github.io/2018/05/09/运维/ELK-filebeat-kafka-zooKeeper搭建.html">
 <meta property="og:site_name" content="jjlu521016">
-<meta property="og:description" content="本教程中使用的ELK和filebeat版本是 6.2.4 1.下载到此页面下载对应的软件包https://www.elastic.co/cn/products 2. 安装(本教程es安装路径是/opt/elk)">
+<meta property="og:description" content="本教程中使用的ELK和filebeat版本是 6.2.4 1. elk安装关于elk的配置参考我之前的一篇文章，不在累述：elk安装地址：https://jjlu521016.github.io/2018/05/01/springboot-logback-log4j-elk.html#2-elk%E9%85%8D%E7%BD%AE">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-13T10:42:28.105Z">
+<meta property="og:image" content="https://github.com/jjlu521016/myblog/blob/master/source/image/resource/kibana1.png">
+<meta property="og:updated_time" content="2018-05-13T14:47:01.886Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ELK+filebeat+kafka+zooKeeper搭建">
-<meta name="twitter:description" content="本教程中使用的ELK和filebeat版本是 6.2.4 1.下载到此页面下载对应的软件包https://www.elastic.co/cn/products 2. 安装(本教程es安装路径是/opt/elk)">
+<meta name="twitter:title" content="ELK+filebeat+kafka+zooKeeper搭建（单机版）">
+<meta name="twitter:description" content="本教程中使用的ELK和filebeat版本是 6.2.4 1. elk安装关于elk的配置参考我之前的一篇文章，不在累述：elk安装地址：https://jjlu521016.github.io/2018/05/01/springboot-logback-log4j-elk.html#2-elk%E9%85%8D%E7%BD%AE">
+<meta name="twitter:image" content="https://github.com/jjlu521016/myblog/blob/master/source/image/resource/kibana1.png">
   
   
     <link rel="icon" href="/favicon.png">
@@ -160,7 +162,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      ELK+filebeat+kafka+zooKeeper搭建
+      ELK+filebeat+kafka+zooKeeper搭建（单机版）
     </h1>
   
 
@@ -181,7 +183,7 @@
 	<div id="toc-article" class="toc-article">
 	    <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
 		<strong class="toc-title">文章目录</strong>
-           <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-下载"><span class="toc-number">1.</span> <span class="toc-text">1.下载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-安装"><span class="toc-number">2.</span> <span class="toc-text">2. 安装</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#系统参数配置"><span class="toc-number">2.1.</span> <span class="toc-text">系统参数配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-es安装"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 es安装</span></a></li></ol></li></ol>
+           <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-elk安装"><span class="toc-number">1.</span> <span class="toc-text">1. elk安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-kafka及zookeeper安装"><span class="toc-number">2.</span> <span class="toc-text">2. kafka及zookeeper安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-安装kafka："><span class="toc-number">2.1.</span> <span class="toc-text">2.1. 安装kafka：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-安装zookeeper："><span class="toc-number">2.2.</span> <span class="toc-text">2.2. 安装zookeeper：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-启动zookeeper"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 启动zookeeper</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-启动kafka"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 启动kafka</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-集成logstash与kafka"><span class="toc-number">3.</span> <span class="toc-text">3. 集成logstash与kafka</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-安装filebeat"><span class="toc-number">4.</span> <span class="toc-text">4. 安装filebeat</span></a></li></ol>
          </div>
    <script type="text/javascript">
 	function showToc(){
@@ -202,25 +204,23 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>本教程中使用的<code>ELK和filebeat</code>版本是 <code>6.2.4</code></p>
-<h3 id="1-下载"><a href="#1-下载" class="headerlink" title="1.下载"></a>1.下载</h3><p>到此页面下载对应的软件包<br><a href="https://www.elastic.co/cn/products" target="_blank" rel="noopener">https://www.elastic.co/cn/products</a></p>
-<h3 id="2-安装"><a href="#2-安装" class="headerlink" title="2. 安装"></a>2. 安装</h3><p>(本教程es安装路径是<code>/opt/elk</code>)<br><a id="more"></a></p>
-<h4 id="系统参数配置"><a href="#系统参数配置" class="headerlink" title="系统参数配置"></a>系统参数配置</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/sysctl.conf</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fs.file-max=65536</span><br><span class="line">#解决`max virtual memory areas vm.max_map_count [65530] likely too low, increase to at least [262144]`</span><br><span class="line">vm.max_map_count = 262144</span><br></pre></td></tr></table></figure>
-<p>输入命令使配置生效<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sysctl -p</span><br></pre></td></tr></table></figure></p>
-<p>解决<code>max file descriptors [4096] for elasticsearch process likely too low, increase to at least [65536]</code>问题<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/security/limits.conf</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>soft nofile 65535</li>
-<li>hard nofile 131072</li>
-<li>soft nproc 2048</li>
-<li>hard nproc 4096</li>
-</ul>
-<h4 id="2-2-es安装"><a href="#2-2-es安装" class="headerlink" title="2.2 es安装"></a>2.2 es安装</h4><p>解压文件<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar zxvf elasticsearch-6.2.4.tar.gz</span><br></pre></td></tr></table></figure></p>
-<p>由于es不能用root账户启动，所以需要添加一个非root账户<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd es</span><br></pre></td></tr></table></figure></p>
-<p>修改es文件夹的权限<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chown -R es:es elasticsearch-6.2.4</span><br></pre></td></tr></table></figure></p>
-<p>修改配置文件<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /opt/elk/elasticsearch-6.2.4/config/elasticsearch.yml</span><br></pre></td></tr></table></figure></p>
-<p>修改<code>elasticsearch.yml</code>的内容如下<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#端口</span></span><br><span class="line"><span class="string">http.port:</span> <span class="number">9200</span></span><br><span class="line"><span class="comment">#ip</span></span><br><span class="line"><span class="string">network.host:</span> <span class="number">192.168</span><span class="number">.188</span><span class="number">.111</span></span><br><span class="line"><span class="comment">#data路径</span></span><br><span class="line"><span class="string">path.data:</span> <span class="string">/opt/elk/elasticsearch-6.2.4/data</span></span><br><span class="line"><span class="comment">#logs路径</span></span><br><span class="line"><span class="string">path.logs:</span> <span class="string">/opt/elk/elasticsearch-6.2.4/logs</span></span><br></pre></td></tr></table></figure></p>
-<p>创建data和logs文件夹<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir data logs</span><br></pre></td></tr></table></figure></p>
-<p>logstash-kafka.conf<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">input &#123;</span><br><span class="line">  kafka&#123;</span><br><span class="line">        bootstrap_servers =&gt; &quot;192.168.188.111:9092&quot;</span><br><span class="line">        topics =&gt; [&quot;ecplogs&quot;]</span><br><span class="line">        codec =&gt; &quot;json&quot;</span><br><span class="line">        consumer_threads =&gt; 2</span><br><span class="line">        enable_auto_commit =&gt; true</span><br><span class="line">        auto_commit_interval_ms =&gt; &quot;1000&quot;</span><br><span class="line">        group_id=&gt; test</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">output &#123;    </span><br><span class="line">     elasticsearch &#123;    </span><br><span class="line">        host =&gt; &quot;192.168.188.111&quot; </span><br><span class="line">        index =&gt; &quot;logstash-%&#123;+YYYY.MM.dd&#125;&quot;         </span><br><span class="line">    &#125;    </span><br><span class="line">    stdout &#123; codec =&gt; rubydebug &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="1-elk安装"><a href="#1-elk安装" class="headerlink" title="1. elk安装"></a>1. elk安装</h2><p>关于elk的配置参考我之前的一篇文章，不在累述：<br>elk安装地址：<br><a href="https://jjlu521016.github.io/2018/05/01/springboot-logback-log4j-elk.html#2-elk%E9%85%8D%E7%BD%AE">https://jjlu521016.github.io/2018/05/01/springboot-logback-log4j-elk.html#2-elk%E9%85%8D%E7%BD%AE</a><br><a id="more"></a></p>
+<h2 id="2-kafka及zookeeper安装"><a href="#2-kafka及zookeeper安装" class="headerlink" title="2. kafka及zookeeper安装"></a>2. kafka及zookeeper安装</h2><p>参考我之前的文章、把对应的配置改成单机即可：</p>
+<h3 id="2-1-安装kafka："><a href="#2-1-安装kafka：" class="headerlink" title="2.1. 安装kafka："></a>2.1. 安装kafka：</h3><p> <a href="https://jjlu521016.github.io/2018/01/12/%E8%BF%90%E7%BB%B4/Kafka%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA%E6%AD%A5%E9%AA%A4.html#more">https://jjlu521016.github.io/2018/01/12/%E8%BF%90%E7%BB%B4/Kafka%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA%E6%AD%A5%E9%AA%A4.html#more</a></p>
+<h3 id="2-2-安装zookeeper："><a href="#2-2-安装zookeeper：" class="headerlink" title="2.2. 安装zookeeper："></a>2.2. 安装zookeeper：</h3><p><a href="https://jjlu521016.github.io/2018/01/01/%E8%BF%90%E7%BB%B4/zookeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA%E6%AD%A5%E9%AA%A4.html#more">https://jjlu521016.github.io/2018/01/01/%E8%BF%90%E7%BB%B4/zookeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA%E6%AD%A5%E9%AA%A4.html#more</a></p>
+<h3 id="2-3-启动zookeeper"><a href="#2-3-启动zookeeper" class="headerlink" title="2.3 启动zookeeper"></a>2.3 启动zookeeper</h3><p>我本地zookeeper配置了环境变量<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zkServer.sh start</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-4-启动kafka"><a href="#2-4-启动kafka" class="headerlink" title="2.4 启动kafka"></a>2.4 启动kafka</h3><p>启动kafka<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># bin/kafka-server-start.sh config/server.properties</span></span><br></pre></td></tr></table></figure></p>
+<p>创建topic<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># bin/kafka-topics.sh --create --zookeeper 192.168.188.110:2181 --replication-factor 1 --partitions 1 --topic test</span></span><br></pre></td></tr></table></figure></p>
+<p>创建生产者<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># bin/kafka-console-producer.sh --broker-list 192.168.188.110:9092 --topic test</span></span><br></pre></td></tr></table></figure></p>
+<p>创建消费者<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-console-consumer.sh --zookeeper 192.168.188.110:2181 --topic <span class="built_in">test</span> --from-beginning</span><br></pre></td></tr></table></figure></p>
+<p>此时生产者输入的内容可以在消费者输出，证明kafka调用通了。</p>
+<h2 id="3-集成logstash与kafka"><a href="#3-集成logstash与kafka" class="headerlink" title="3. 集成logstash与kafka"></a>3. 集成logstash与kafka</h2><p>参考：<br><a href="https://www.elastic.co/guide/en/logstash/current/plugins-inputs-kafka.html" target="_blank" rel="noopener">https://www.elastic.co/guide/en/logstash/current/plugins-inputs-kafka.html</a><br>vi logstash_agent.conf<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">input &#123;</span><br><span class="line">  kafka &#123;</span><br><span class="line">    bootstrap_servers =&gt; &quot;192.168.188.110:9092&quot;</span><br><span class="line">    #topic id</span><br><span class="line">    topics =&gt; &quot;test&quot;</span><br><span class="line">    codec =&gt; &quot;json&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">filter &#123;</span><br><span class="line">    json &#123;</span><br><span class="line">      source =&gt; &quot;message&quot;</span><br><span class="line">      remove_field =&gt; &quot;message&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">output &#123;</span><br><span class="line">   elasticsearch&#123;</span><br><span class="line">      hosts =&gt; [&quot;192.168.188.110:9200&quot;]</span><br><span class="line">	    index =&gt; &quot;kafka-%&#123;+YYYY.MM.dd&#125;&quot;</span><br><span class="line">    &#125;</span><br><span class="line">   stdout &#123; codec =&gt; rubydebug &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>启动elk之后，在kafka生产者输入一条信息之后logstash打印出对应的内容，说明集成成功了<br>。在kibana设置对应的日志。</p>
+<h2 id="4-安装filebeat"><a href="#4-安装filebeat" class="headerlink" title="4. 安装filebeat"></a>4. 安装filebeat</h2><p>解压<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf filebeat-6.2.3-linux-x86_64.tar.gz</span><br></pre></td></tr></table></figure></p>
+<p>配置filebeat.yml<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">filebeat.prospectors:</span></span><br><span class="line"><span class="comment"># 这里面配置实际的日志路径</span></span><br><span class="line"><span class="attr">- type:</span> <span class="string">log</span></span><br><span class="line"><span class="attr">  enabled:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  paths:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">/var/log/test1.log</span></span><br><span class="line"><span class="attr">  fields:</span></span><br><span class="line"><span class="attr">    log_topics:</span> <span class="string">test1</span></span><br><span class="line"><span class="attr">- type:</span> <span class="string">log</span></span><br><span class="line"><span class="attr">  enabled:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  paths:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">/var/log/test2.log</span></span><br><span class="line"><span class="attr">  fields:</span></span><br><span class="line"><span class="attr">    log_topics:</span> <span class="string">test2</span></span><br><span class="line"><span class="string">output.kafka:</span></span><br><span class="line"><span class="attr">  enabled:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  hosts:</span> <span class="string">["10.112.101.90:9092"]</span></span><br><span class="line"><span class="attr">  topic:</span> <span class="string">'<span class="template-variable">%&#123;[fields][log_topics]&#125;</span>'</span></span><br></pre></td></tr></table></figure></p>
+<p>运行<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./filebeat -e -c filebeat.yml</span><br></pre></td></tr></table></figure></p>
+<p>把logstash停止，修改配置文件，添加filebeat配置的topic。重启logstash。打开kibana刷新页面，看到filebeat收集到的日志。</p>
+<p><img src="https://github.com/jjlu521016/myblog/blob/master/source/image/resource/kibana1.png" alt=""></p>
 
       
 
@@ -364,7 +364,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-下载"><span class="toc-number">1.</span> <span class="toc-text">1.下载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-安装"><span class="toc-number">2.</span> <span class="toc-text">2. 安装</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#系统参数配置"><span class="toc-number">2.1.</span> <span class="toc-text">系统参数配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-es安装"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 es安装</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-elk安装"><span class="toc-number">1.</span> <span class="toc-text">1. elk安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-kafka及zookeeper安装"><span class="toc-number">2.</span> <span class="toc-text">2. kafka及zookeeper安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-安装kafka："><span class="toc-number">2.1.</span> <span class="toc-text">2.1. 安装kafka：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-安装zookeeper："><span class="toc-number">2.2.</span> <span class="toc-text">2.2. 安装zookeeper：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-启动zookeeper"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 启动zookeeper</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-启动kafka"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 启动kafka</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-集成logstash与kafka"><span class="toc-number">3.</span> <span class="toc-text">3. 集成logstash与kafka</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-安装filebeat"><span class="toc-number">4.</span> <span class="toc-text">4. 安装filebeat</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -498,31 +498,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">localStorage</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">dubbo</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">jquery</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">源码</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Mybatis</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">springboot</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">exception</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -534,6 +510,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Mybatis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">exception</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">dubbo</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">spring</a>
               </li>
              
@@ -542,7 +530,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+                <a href="javascript:void(0)" class="js-tag color1">springboot</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -554,15 +542,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">JVM</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">jedis</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">mybatis</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -578,11 +566,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">分布式ID</a>
+                <a href="javascript:void(0)" class="js-tag color3">localStorage</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ELK</a>
+                <a href="javascript:void(0)" class="js-tag color2">jquery</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -591,6 +583,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">集群</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ELK</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">分布式ID</a>
               </li>
              
               <li class="article-tag-list-item">
