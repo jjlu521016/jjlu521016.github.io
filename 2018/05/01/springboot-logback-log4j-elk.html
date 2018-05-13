@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://jjlu521016.github.io">
-  <title>LJS | jjlu521016</title>
+  <title>springboot logback(log4j) elk 非集群 | jjlu521016</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="jjlu521016">
-<meta property="og:url" content="https://jjlu521016.github.io/archives/page/3/index.html">
+  <meta name="description" content="好长时间没有写过blog了。抽时间把很久之前集成的一个简易的elk升级了下本教程使用的软件如下：springboot 2.*jdk8elk 6.2.4(elasticsearch logstash kibana)">
+<meta name="keywords" content="elk">
+<meta property="og:type" content="article">
+<meta property="og:title" content="springboot logback(log4j) elk 非集群">
+<meta property="og:url" content="https://jjlu521016.github.io/2018/05/01/springboot-logback-log4j-elk.html">
 <meta property="og:site_name" content="jjlu521016">
+<meta property="og:description" content="好长时间没有写过blog了。抽时间把很久之前集成的一个简易的elk升级了下本教程使用的软件如下：springboot 2.*jdk8elk 6.2.4(elasticsearch logstash kibana)">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-13T10:42:11.920Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="jjlu521016">
+<meta name="twitter:title" content="springboot logback(log4j) elk 非集群">
+<meta name="twitter:description" content="好长时间没有写过blog了。抽时间把很久之前集成的一个简易的elk升级了下本教程使用的软件如下：springboot 2.*jdk8elk 6.2.4(elasticsearch logstash kibana)">
   
   
     <link rel="icon" href="/favicon.png">
@@ -148,216 +153,262 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-springboot-logback-log4j-elk" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      springboot logback(log4j) elk 非集群
+    </h1>
+  
+
+        
+        <a href="/2018/05/01/springboot-logback-log4j-elk.html" class="archive-article-date">
+  	<time datetime="2018-05-01T10:06:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-01</time>
+</a>
+        
+      </header>
     
+
+    <!-- 目录内容 -->
+
+    <p class="show-toc-btn" id="show-toc-btn" onclick="showToc();" style="display:none">
+          <span class="btn-bg"></span>
+          <span class="btn-text">文章导航</span>
+          </p>
+	<div id="toc-article" class="toc-article">
+	    <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
+		<strong class="toc-title">文章目录</strong>
+           <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-springboot集成logback-logstash"><span class="toc-number">1.</span> <span class="toc-text">1. springboot集成logback+logstash</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-pom加入依赖"><span class="toc-number">2.</span> <span class="toc-text">1.1 pom加入依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-在application-yml中加载logback的配置文件"><span class="toc-number">3.</span> <span class="toc-text">1.2 在application.yml中加载logback的配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-在logback-xml中配置logstash"><span class="toc-number">4.</span> <span class="toc-text">1.3 在logback.xml中配置logstash</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-elk配置"><span class="toc-number">5.</span> <span class="toc-text">2.elk配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-es配置"><span class="toc-number">5.1.</span> <span class="toc-text">2.1 es配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-logstash-配置"><span class="toc-number">5.2.</span> <span class="toc-text">2.2 logstash 配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-kibana-配置"><span class="toc-number">5.3.</span> <span class="toc-text">2.3 kibana 配置</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-kibana界面设置"><span class="toc-number">6.</span> <span class="toc-text">3.kibana界面设置</span></a></li></ol>
+         </div>
+   <script type="text/javascript">
+	function showToc(){
+		var toc_article = document.getElementById("toc-article");
+		var show_toc_btn = document.getElementById("show-toc-btn");
+		toc_article.setAttribute("style","display:block");
+		show_toc_btn.setAttribute("style","display:none");
+		};
+	function showBtn(){
+		var toc_article = document.getElementById("toc-article");
+		var show_toc_btn = document.getElementById("show-toc-btn");
+		toc_article.setAttribute("style","display:none");
+		show_toc_btn.setAttribute("style","display:block");
+		};
+   </script>
+      
+<!-- 目录内容结束 -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>好长时间没有写过blog了。抽时间把很久之前集成的一个简易的elk升级了下<br>本教程使用的软件如下：<br>springboot 2.*<br>jdk8<br>elk 6.2.4(elasticsearch logstash kibana)<br><a id="more"></a></p>
+<h3 id="1-springboot集成logback-logstash"><a href="#1-springboot集成logback-logstash" class="headerlink" title="1. springboot集成logback+logstash"></a>1. springboot集成logback+logstash</h3><h3 id="1-1-pom加入依赖"><a href="#1-1-pom加入依赖" class="headerlink" title="1.1 pom加入依赖"></a>1.1 pom加入依赖</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-logging<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.0.0.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- Logstash encoder --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>net.logstash.logback<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>logstash-logback-encoder<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.9<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>net.logstash.log4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jsonevent-layout<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="1-2-在application-yml中加载logback的配置文件"><a href="#1-2-在application-yml中加载logback的配置文件" class="headerlink" title="1.2 在application.yml中加载logback的配置文件"></a>1.2 在application.yml中加载logback的配置文件</h3><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">logging:</span></span><br><span class="line"><span class="attr">  config:</span> <span class="attr">classpath:logback.xml</span></span><br><span class="line"><span class="attr">  path:</span> <span class="string">logs</span></span><br></pre></td></tr></table></figure>
+<h3 id="1-3-在logback-xml中配置logstash"><a href="#1-3-在logback-xml中配置logstash" class="headerlink" title="1.3 在logback.xml中配置logstash"></a>1.3 在logback.xml中配置logstash</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">appender</span> <span class="attr">name</span>=<span class="string">"logstash"</span> <span class="attr">class</span>=<span class="string">"net.logstash.logback.appender.LogstashTcpSocketAppender"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"Encoding"</span> <span class="attr">value</span>=<span class="string">"UTF-8"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">destination</span>&gt;</span>192.168.188.110<span class="tag">&lt;/<span class="name">destination</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">port</span>&gt;</span>4560<span class="tag">&lt;/<span class="name">port</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- encoder is required --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">encoder</span> <span class="attr">class</span>=<span class="string">"net.logstash.logback.encoder.LogstashEncoder"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">appender</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">root</span> <span class="attr">level</span>=<span class="string">"INFO"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">appender-ref</span> <span class="attr">ref</span>=<span class="string">"logstash"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-elk配置"><a href="#2-elk配置" class="headerlink" title="2.elk配置"></a>2.elk配置</h3><h4 id="2-1-es配置"><a href="#2-1-es配置" class="headerlink" title="2.1 es配置"></a>2.1 es配置</h4><p>解压文件<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar zxvf elasticsearch-6.2.4.tar.gz</span><br></pre></td></tr></table></figure></p>
+<p>由于es不能用root账户启动，所以需要添加一个非root账户<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd es</span><br></pre></td></tr></table></figure></p>
+<p>修改es文件夹的权限<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chown -R es:es elasticsearch-6.2.4</span><br></pre></td></tr></table></figure></p>
+<p>修改配置文件<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /opt/elk/elasticsearch-6.2.4/config/elasticsearch.yml</span><br></pre></td></tr></table></figure></p>
+<p>修改<code>elasticsearch.yml</code>的内容如下<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#端口</span></span><br><span class="line"><span class="string">http.port:</span> <span class="number">9200</span></span><br><span class="line"><span class="comment">#ip</span></span><br><span class="line"><span class="string">network.host:</span> <span class="number">192.168</span><span class="number">.188</span><span class="number">.111</span></span><br><span class="line"><span class="comment">#data路径</span></span><br><span class="line"><span class="string">path.data:</span> <span class="string">/opt/elk/elasticsearch-6.2.4/data</span></span><br><span class="line"><span class="comment">#logs路径</span></span><br><span class="line"><span class="string">path.logs:</span> <span class="string">/opt/elk/elasticsearch-6.2.4/logs</span></span><br></pre></td></tr></table></figure></p>
+<p>创建data和logs文件夹<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir data logs</span><br></pre></td></tr></table></figure></p>
+<p>启动es(为了方便观察日志没有后台启动)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/elasticsearch</span><br></pre></td></tr></table></figure></p>
+<h4 id="2-2-logstash-配置"><a href="#2-2-logstash-配置" class="headerlink" title="2.2 logstash 配置"></a>2.2 logstash 配置</h4><p>解压文件<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar zxvf logstash-6.2.4.tar.gz</span><br></pre></td></tr></table></figure></p>
+<p>进入config文件夹新建log4j_es.conf文件并编写内容<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi log4j_es.conf</span><br></pre></td></tr></table></figure></p>
+<p>log4j_es.conf内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">input &#123;</span><br><span class="line">    # https://www.elastic.co/guide/en/logstash/current/plugins-inputs-log4j.html</span><br><span class="line">    tcp &#123;  </span><br><span class="line">    mode =&gt; &quot;server&quot;  </span><br><span class="line">    host =&gt; &quot;192.168.188.110&quot;  </span><br><span class="line">    port =&gt; 4560  </span><br><span class="line">    codec =&gt; json_lines  </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">output &#123;</span><br><span class="line">   elasticsearch&#123;</span><br><span class="line">        hosts =&gt; [&quot;192.168.188.110:9200&quot;]</span><br><span class="line">        index =&gt; &quot;log4j-%&#123;+YYYY.MM.dd&#125;&quot;</span><br><span class="line">        document_type =&gt; &quot;log4j_type&quot;</span><br><span class="line">    &#125;</span><br><span class="line">   stdout &#123; codec =&gt; rubydebug &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>启动logstash (为了方便观察日志没有后台启动)<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/logstash -f config/log4j_es.conf</span><br></pre></td></tr></table></figure></p>
+<h4 id="2-3-kibana-配置"><a href="#2-3-kibana-配置" class="headerlink" title="2.3 kibana 配置"></a>2.3 kibana 配置</h4><p>解压<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar zxvf kibana-6.2.4-linux-x86_64.tar.gz</span><br></pre></td></tr></table></figure></p>
+<p>修改配置文件<code>kibana.yml</code><br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">server.port:</span> <span class="number">5601</span></span><br><span class="line"><span class="comment"># To allow connections from remote users, set this parameter to a non-loopback address.</span></span><br><span class="line"><span class="string">server.host:</span> <span class="string">"192.168.188.110"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># The URL of the Elasticsearch instance to use for all your queries.</span></span><br><span class="line"><span class="string">elasticsearch.url:</span> <span class="string">"http://192.168.188.110:9200"</span></span><br></pre></td></tr></table></figure></p>
+<p>启动kibana<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/kibana</span><br></pre></td></tr></table></figure></p>
+<h3 id="3-kibana界面设置"><a href="#3-kibana界面设置" class="headerlink" title="3.kibana界面设置"></a>3.kibana界面设置</h3><p>进入kibana界面<br>点击 Management 点击Index Patterns<br>在 Create index pattern 的文本框输入索引名称，因为我在logstash中设置索引为 <code>log4j-%{+YYYY.MM.dd}</code>,所以我们填写 <code>log4j-*</code> 点击下一步设置直到完成。<br>点击<code>Discovery</code>可以看到我们的日志了。</p>
+<p>接下来，将elk进行升级 使用elk+filebeat+kafka,敬请期待。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢您的打赏！！<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/image/alipay.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/image/wechat.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/03/15/DB/mybatis-chose-when条件的坑.html" class="archive-article-date">
-  	<time datetime="2018-03-15T11:03:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-15</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/03/15/DB/mybatis-chose-when条件的坑.html">mybatis chose when条件的坑</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">mybatis</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">elk</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://jjlu521016.github.io/2018/05/01/springboot-logback-log4j-elk.html" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/03/09/分布式/Redis单个key存储的value很大.html" class="archive-article-date">
-  	<time datetime="2018-03-09T06:53:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-09</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2018/05/09/运维/ELK-filebeat-kafka-zooKeeper搭建.html" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          ELK+filebeat+kafka+zooKeeper搭建
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/04/24/js/localStorage简单封装设置失效时间.html" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">localStorage简单封装设置失效时间</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/03/09/分布式/Redis单个key存储的value很大.html">Redis单个key存储的value很大</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-springboot集成logback-logstash"><span class="toc-number">1.</span> <span class="toc-text">1. springboot集成logback+logstash</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-pom加入依赖"><span class="toc-number">2.</span> <span class="toc-text">1.1 pom加入依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-在application-yml中加载logback的配置文件"><span class="toc-number">3.</span> <span class="toc-text">1.2 在application.yml中加载logback的配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-在logback-xml中配置logstash"><span class="toc-number">4.</span> <span class="toc-text">1.3 在logback.xml中配置logstash</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-elk配置"><span class="toc-number">5.</span> <span class="toc-text">2.elk配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-es配置"><span class="toc-number">5.1.</span> <span class="toc-text">2.1 es配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-logstash-配置"><span class="toc-number">5.2.</span> <span class="toc-text">2.2 logstash 配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-kibana-配置"><span class="toc-number">5.3.</span> <span class="toc-text">2.3 kibana 配置</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-kibana界面设置"><span class="toc-number">6.</span> <span class="toc-text">3.kibana界面设置</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/03/09/分布式/Redis常见问题.html" class="archive-article-date">
-  	<time datetime="2018-03-09T04:02:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-09</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/03/09/分布式/Redis常见问题.html">Redis常见问题</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/03/07/运维/Tomcat特殊字符报400.html" class="archive-article-date">
-  	<time datetime="2018-03-07T09:02:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-07</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/03/07/运维/Tomcat特殊字符报400.html">Tomcat特殊字符报400（The valid characters are defined in RFC 7230 and RFC 3986）</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">运维</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/01/17/java/使用Jedis在高并发报错-java-net-SocketException-Connection-reset-by-peer-socket-write-error.html" class="archive-article-date">
-  	<time datetime="2018-01-17T06:29:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/01/17/java/使用Jedis在高并发报错-java-net-SocketException-Connection-reset-by-peer-socket-write-error.html">使用Jedis在高并发报错 (java.net.SocketException: Connection reset by peer: socket write error)</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">jedis</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
+        
+    </div>
+</aside>
 
 
-  <nav id="page-nav">
-    
-    <a class="extend prev" rel="prev" href="/archives/page/2/">&laquo; 上一页</a><a class="page-number" href="/archives/">1</a><a class="page-number" href="/archives/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/archives/page/4/">4</a><a class="page-number" href="/archives/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/archives/page/7/">7</a><a class="extend next" rel="next" href="/archives/page/4/">下一页 &raquo;</a>
-  </nav>
+
+  
+  
+  
+
+  
+
+  
+
+  
+  <div id="gitment-ctn"></div> 
+<link rel="stylesheet" href="https://billts.site/extra_css/gitment.css">
+<script src="/./gitment.js"></script>
+<script>
+var gitment = new Gitment({
+  id: 'Tue May 01 2018 18:06:17 GMT+0800',
+  owner: 'jjlu521016',
+  repo: 'jjlu521016.github.io',
+  oauth: {
+    client_id: 'd8527a9b07d5811879a8',
+    client_secret: 'db142a6624b2422afa80827103b630a0cb282d32',
+  },
+})
+gitment.render('gitment-ctn')
+</script>
+  
 
 
           </div>
@@ -382,8 +433,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
