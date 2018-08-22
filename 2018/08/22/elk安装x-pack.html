@@ -6,15 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://jjlu521016.github.io">
-  <title>LJS: 2016 | jjlu521016</title>
+  <title>elk6.x 安装x-pack | jjlu521016</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="jjlu521016">
-<meta property="og:url" content="https://jjlu521016.github.io/archives/2016/index.html">
+  <meta name="description" content="注意：安装x-pack的时候一定要停止对应的服务，不然可能出现各种异常报错 elasticsearch安装x-pack切换到es的bin目录1./elasticsearch-plugin install x-pack 稍等片刻可以安装完毕(很快)，如果不能下载插件的话可以本地安装1./logstash-plugin install xx/x-pack-version.zip 启动elasticse">
+<meta name="keywords" content="-elk">
+<meta property="og:type" content="article">
+<meta property="og:title" content="elk6.x 安装x-pack">
+<meta property="og:url" content="https://jjlu521016.github.io/2018/08/22/elk安装x-pack.html">
 <meta property="og:site_name" content="jjlu521016">
+<meta property="og:description" content="注意：安装x-pack的时候一定要停止对应的服务，不然可能出现各种异常报错 elasticsearch安装x-pack切换到es的bin目录1./elasticsearch-plugin install x-pack 稍等片刻可以安装完毕(很快)，如果不能下载插件的话可以本地安装1./logstash-plugin install xx/x-pack-version.zip 启动elasticse">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://jjlu521016.github.io/2018/08/image/elk/es-login.png">
+<meta property="og:image" content="https://jjlu521016.github.io/2018/08/image/elk/kibana.png">
+<meta property="og:updated_time" content="2018-08-22T06:16:18.097Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="jjlu521016">
+<meta name="twitter:title" content="elk6.x 安装x-pack">
+<meta name="twitter:description" content="注意：安装x-pack的时候一定要停止对应的服务，不然可能出现各种异常报错 elasticsearch安装x-pack切换到es的bin目录1./elasticsearch-plugin install x-pack 稍等片刻可以安装完毕(很快)，如果不能下载插件的话可以本地安装1./logstash-plugin install xx/x-pack-version.zip 启动elasticse">
+<meta name="twitter:image" content="https://jjlu521016.github.io/2018/08/image/elk/es-login.png">
   
   
     <link rel="icon" href="/favicon.png">
@@ -148,59 +156,248 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-elk安装x-pack" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/10/19/DB/oracle-用interval-求时间.html" class="archive-article-date">
-  	<time datetime="2016-10-19T05:52:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-10-19</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/10/19/DB/oracle-用interval-求时间.html">oracle 用interval 求时间</a>
+    <h1 class="article-title" itemprop="name">
+      elk6.x 安装x-pack
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2018/08/22/elk安装x-pack.html" class="archive-article-date">
+  	<time datetime="2018-08-22T05:39:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-22</time>
+</a>
+        
+      </header>
+    
+
+    <!-- 目录内容 -->
+
+    <p class="show-toc-btn" id="show-toc-btn" onclick="showToc();" style="display:none">
+          <span class="btn-bg"></span>
+          <span class="btn-text">文章导航</span>
+          </p>
+	<div id="toc-article" class="toc-article">
+	    <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
+		<strong class="toc-title">文章目录</strong>
+           <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#elasticsearch安装x-pack"><span class="toc-number">1.</span> <span class="toc-text">elasticsearch安装x-pack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#logstash安装x-pack"><span class="toc-number">2.</span> <span class="toc-text">logstash安装x-pack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kibana安装xpack"><span class="toc-number">3.</span> <span class="toc-text">kibana安装xpack</span></a></li></ol>
+         </div>
+   <script type="text/javascript">
+	function showToc(){
+		var toc_article = document.getElementById("toc-article");
+		var show_toc_btn = document.getElementById("show-toc-btn");
+		toc_article.setAttribute("style","display:block");
+		show_toc_btn.setAttribute("style","display:none");
+		};
+	function showBtn(){
+		var toc_article = document.getElementById("toc-article");
+		var show_toc_btn = document.getElementById("show-toc-btn");
+		toc_article.setAttribute("style","display:none");
+		show_toc_btn.setAttribute("style","display:block");
+		};
+   </script>
+      
+<!-- 目录内容结束 -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>注意：安装x-pack的时候一定要停止对应的服务，不然可能出现各种异常报错</p>
+<h2 id="elasticsearch安装x-pack"><a href="#elasticsearch安装x-pack" class="headerlink" title="elasticsearch安装x-pack"></a>elasticsearch安装x-pack</h2><p>切换到es的bin目录<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./elasticsearch-plugin install x-pack</span><br></pre></td></tr></table></figure></p>
+<p>稍等片刻可以安装完毕(很快)，如果不能下载插件的话可以本地安装<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./logstash-plugin install xx/x-pack-version.zip</span><br></pre></td></tr></table></figure></p>
+<p>启动elasticsearch之后，到bin目录执行下面命令初始化密码:<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./bin/x-pack/setup-passwords interactive  //ps:自定义是密码</span><br><span class="line">./bin/x-pack/setup-passwords auto   //ps:随机设置密码</span><br></pre></td></tr></table></figure></p>
+<p>浏览器输入<a href="http://ip:9200的时候会提示输入用户名和密码" target="_blank" rel="noopener">http://ip:9200的时候会提示输入用户名和密码</a><br><img src="../image/elk/es-login.png"></p>
+<h2 id="logstash安装x-pack"><a href="#logstash安装x-pack" class="headerlink" title="logstash安装x-pack"></a>logstash安装x-pack</h2><p>切换到logstash的bin目录执行<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./logstash-plugin install x-pack</span><br></pre></td></tr></table></figure></p>
+<p>稍等片刻安装完成，此时重启logstash你会发现报错了…..<br>报错1<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">but got an error. &#123;:url=&gt;&quot;http://logstash_system:xxxxxx@localhost:9200/</span><br></pre></td></tr></table></figure></p>
+<p>在logstash.yml中添加<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">xpack.monitoring.elasticsearch.url:</span> <span class="attr">http://ip:9200</span></span><br></pre></td></tr></table></figure></p>
+<p>报错2<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[WARN ][logstash.licensechecker.licensereader] Attempted to resurrect connection to dead ES instance, but got an error. &#123;:url=&gt;&quot;http://localhost:9200/&quot;, :error_type=&gt;LogStash::Outputs::ElasticSearch::HttpClient::Pool::HostUnreachableError, :error=&gt;&quot;Elasticsearch Unreachable: [http://localhost:9200/][Manticore::SocketException] Connection refused (Connection refused)&quot;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>参考：<br><a href="https://discuss.elastic.co/t/logstash-with-x-pack/90230" target="_blank" rel="noopener">https://discuss.elastic.co/t/logstash-with-x-pack/90230</a><br><a href="https://www.cnblogs.com/liang1101/p/8509978.html" target="_blank" rel="noopener">https://www.cnblogs.com/liang1101/p/8509978.html</a><br>也可以关闭xpack的monitoring检测<br>在logstash.yml中添加<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">xpack.monitoring.enabled:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure></p>
+<p>在logstash加载的配置文件配置es的用户名和密码:使用es用户的账号，其他账号由于权限问题会导致各种报错<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">elasticsearch&#123;</span><br><span class="line">      hosts =&gt; [&quot;ip:9200&quot;]</span><br><span class="line">      index =&gt; &quot;xxx-%&#123;+YYYY.MM.dd&#125;&quot;</span><br><span class="line">      user =&gt; &quot;esUser&quot;</span><br><span class="line">      password =&gt; &quot;espasswd&quot;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="kibana安装xpack"><a href="#kibana安装xpack" class="headerlink" title="kibana安装xpack"></a>kibana安装xpack</h2><p>切换到kibana的bin目录<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./kibana-plugin install xpack</span><br></pre></td></tr></table></figure></p>
+<p>修改kibana配置<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi config/kibana.yml</span><br></pre></td></tr></table></figure></p>
+<p>在kibana配置文件添加<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">xpack.reporting.encryptionKey:</span> <span class="string">"xxxxxxxxx"</span></span><br><span class="line"><span class="string">xpack.security.encryptionKey:</span> <span class="string">"something_at_least_32_characters"</span></span><br><span class="line"><span class="string">elasticsearch.username:</span> <span class="string">"esUser"</span></span><br><span class="line"><span class="string">elasticsearch.password:</span> <span class="string">"espasswd"</span></span><br></pre></td></tr></table></figure></p>
+<p>启动kibana，访问ip:5601,输入用户名密码登录<br><img src="../image/elk/kibana.png"></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢您的打赏！！<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/image/alipay.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/image/wechat.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">oracle</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">-elk</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://jjlu521016.github.io/2018/08/22/elk安装x-pack.html" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2018/07/17/java/使用Spring-Boot、Multipartfile上传文件路径错误问题.html" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">使用Spring Boot、Multipartfile上传文件路径错误问题</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#elasticsearch安装x-pack"><span class="toc-number">1.</span> <span class="toc-text">elasticsearch安装x-pack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#logstash安装x-pack"><span class="toc-number">2.</span> <span class="toc-text">logstash安装x-pack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kibana安装xpack"><span class="toc-number">3.</span> <span class="toc-text">kibana安装xpack</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
+  
+
+  
+
+  
+  <div id="gitment-ctn"></div> 
+<link rel="stylesheet" href="https://billts.site/extra_css/gitment.css">
+<script src="/./gitment.js"></script>
+<script>
+var gitment = new Gitment({
+  id: 'Wed Aug 22 2018 13:39:50 GMT+0800',
+  owner: 'jjlu521016',
+  repo: 'jjlu521016.github.io',
+  oauth: {
+    client_id: 'd8527a9b07d5811879a8',
+    client_secret: 'db142a6624b2422afa80827103b630a0cb282d32',
+  },
+})
+gitment.render('gitment-ctn')
+</script>
+  
 
 
           </div>
@@ -225,8 +422,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
