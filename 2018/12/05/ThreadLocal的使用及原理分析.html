@@ -16,14 +16,14 @@
 <meta property="og:site_name" content="jjlu521016">
 <meta property="og:description" content="1. 什么是ThreadLocal？ThreadLocal称作线程本地存储。简单来说，就是ThreadLocal为共享变量在每个线程中都创建一个副本，每个线程可以访问自己内部的副本变量。这样做的好处是可以保证共享变量在多线程环境下访问的线程安全性。 2. ThreadLocal的使用引题：在没有使用ThreadLocal的时候，定义了一个静态的成员变量num，然后通过构造5个线程对这个num做递增">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://jjlu521016.github.io/image/java/threadlocal.png">
+<meta property="og:image" content="https://jjlu521016.github.io/image/java/threadLocal.png">
 <meta property="og:image" content="https://jjlu521016.github.io/image/java/threadlocal2.png">
 <meta property="og:image" content="https://jjlu521016.github.io/image/java/threadlocal3.png">
-<meta property="og:updated_time" content="2018-12-05T14:47:50.831Z">
+<meta property="og:updated_time" content="2018-12-05T14:54:54.629Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ThreadLocal的使用及原理分析">
 <meta name="twitter:description" content="1. 什么是ThreadLocal？ThreadLocal称作线程本地存储。简单来说，就是ThreadLocal为共享变量在每个线程中都创建一个副本，每个线程可以访问自己内部的副本变量。这样做的好处是可以保证共享变量在多线程环境下访问的线程安全性。 2. ThreadLocal的使用引题：在没有使用ThreadLocal的时候，定义了一个静态的成员变量num，然后通过构造5个线程对这个num做递增">
-<meta name="twitter:image" content="https://jjlu521016.github.io/image/java/threadlocal.png">
+<meta name="twitter:image" content="https://jjlu521016.github.io/image/java/threadLocal.png">
   
   
     <link rel="icon" href="/favicon.png">
@@ -218,7 +218,7 @@
 <li>get: 获取ThreadLocal中当前线程对应的线程局部变量</li>
 <li>set：设置当前线程的线程局部变量的值</li>
 <li>remove：将当前线程局部变量的值删除  </li>
-<li>initialValue 返回当前线程局部变量的初始值<br><img src="/image/java/threadlocal.png"><blockquote>
+<li>initialValue 返回当前线程局部变量的初始值<br><img src="/image/java/threadLocal.png"><blockquote>
 <p>源码基于JDK 1.8   </p>
 </blockquote>
 </li>
@@ -570,11 +570,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">oracle</a>
+                <a href="javascript:void(0)" class="js-tag color3">mybatis</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">mybatis</a>
+                <a href="javascript:void(0)" class="js-tag color2">oracle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -586,15 +586,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">源码</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">dubbo</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">exception</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">源码</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -638,27 +638,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Multipartfile</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">cordova</a>
+                <a href="javascript:void(0)" class="js-tag color4">Multipartfile</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">jquery</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">localStorage</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -670,7 +658,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ELK</a>
+                <a href="javascript:void(0)" class="js-tag color3">cordova</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">localStorage</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">jquery</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -682,11 +678,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">-elk</a>
+                <a href="javascript:void(0)" class="js-tag color4">ELK</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">运维</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">-elk</a>
               </li>
              
               <li class="article-tag-list-item">
