@@ -150,20 +150,20 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-CMS学习笔记" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+    <article id="post-ThreadLocal的使用及原理分析" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/04/CMS学习笔记.html">CMS学习笔记</a>
+      <a class="article-title" href="/2018/12/05/ThreadLocal的使用及原理分析.html">ThreadLocal的使用及原理分析</a>
     </h1>
   
 
         
-        <a href="/2018/12/04/CMS学习笔记.html" class="archive-article-date">
-  	<time datetime="2018-12-04T15:06:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-04</time>
+        <a href="/2018/12/05/ThreadLocal的使用及原理分析.html" class="archive-article-date">
+  	<time datetime="2018-12-05T13:50:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-05</time>
 </a>
         
       </header>
@@ -174,59 +174,15 @@
 <!-- 目录内容结束 -->
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="一-什么是cms及cms的适用场景"><a href="#一-什么是cms及cms的适用场景" class="headerlink" title="一. 什么是cms及cms的适用场景"></a>一. 什么是cms及cms的适用场景</h1><ol>
-<li>CMS ：Mostly-Concurrent收集器，也称并发标记清除收集器（Concurrent Mark-Sweep GC，CMS收集器），它管理新生代的方式与Parallel收集器和Serial收集器相同，而在老年代则是尽可能得并发执行，每个垃圾收集器周期只有2次短停顿。</li>
-<li>CMS的目的： 为了消除Throught收集器和Serial收集器在Full GC周期中的<code>长时间停顿</code>。</li>
-<li>CMS的使用场景：应用需要更快速的响应，不想长时间的停顿，前提条件是你的CPU资源比较丰富的条件下，适合使用CMS收集器。对于实时响应的任务，比如web server类似。</li>
-</ol>
-<h1 id="二-CMS的过程"><a href="#二-CMS的过程" class="headerlink" title="二. CMS的过程"></a>二. CMS的过程</h1><ul>
-<li>初始标记(STW initial mark) </li>
-<li>并发标记(Concurrent marking) </li>
-<li>并发预清理(Concurrent precleaning) </li>
-<li>重新标记(STW remark) </li>
-<li>并发清理(Concurrent sweeping) </li>
-<li>并发重置(Concurrent reset)  </li>
-</ul>
-<ol>
-<li><p>初始标记 ：在这个阶段，需要虚拟机停顿正在执行的任务，官方的叫法STW(Stop The Word)。这个过程从垃圾回收的”根对象”开始，只扫描到能够和”根对象”直接关联的对象，并作标记。所以这个过程虽然暂停了整个JVM，但是很快就完成了。<br><img src="/image/cms/stw.png"></p>
-</li>
-<li><p>并发标记：由上一个阶段标记过的对象，开始tracing过程，标记所有可达的对象，这个阶段垃圾回收线程和应用线程同时运行，如上图中的黄色的点。在并发标记过程中，应用线程还在跑，因此会导致有些对象会从新生代晋升到老年代、有些老年代的对象引用会被改变、有些对象会直接分配到老年代，这些受到影响的老年代对象所在的card会被标记为dirty，用于重新标记阶段扫描。这个阶段过程中，老年代对象的card被标记为dirty的可能原因，就是下图中绿色的线：<br><img src="/image/cms/Concurrent-marking.png"></p>
-</li>
-<li><p>并发预清理：预清理，也是用于标记老年代存活的对象，目的是为了让重新标记阶段的STW尽可能短。这个阶段的目标是在并发标记阶段被应用线程影响到的老年代对象，包括：（1）老年代中card为dirty的对象；<br>（2）幸存区(from和to)中引用的老年代对象。<br>因此，这个阶段也需要扫描新生代+老年代。</p>
-</li>
-</ol>
-<p>可中断的预清理：这个阶段的目标跟“预清理”阶段相同，也是为了减轻重新标记阶段的工作量。可中断预清理的价值：在进入重新标记阶段之前尽量等到一个Minor GC，尽量缩短重新标记阶段的停顿时间。另外可中断预清理会在Eden达到50%的时候开始，这时候离下一次minor gc还有半程的时间，这个还有另一个意义，即避免短时间内连着的两个停顿.<br>清理步骤后，如果满足下面两个条件，就不会开启可中断的预清理，直接进入重新标记阶段：</p>
-<p>如果不满足上面两个条件，则进入可中断的预清理，可中断预清理可能会执行多次，那么退出这个阶段的出口有两个（源码参见下图）：<br><img src="/image/cms/cms-code.webp"></p>
-<ul>
-<li>设置了CMSMaxAbortablePrecleanLoops，并且执行的次数超过了这个值，这个参数的默认值是0；</li>
-<li><p>CMSMaxAbortablePrecleanTime，执行可中断预清理的时间超过了这个值，这个参数的默认值是5000毫秒。</p>
-</li>
-<li><p>有可能可中断预清理过程中一直没等到Minor gc，这时候进入重新标记阶段的话，新生代还有很多活着的对象，就回导致STW变长，因此CMS还提供了CMSScavengeBeforeRemark参数，可以在进入重新标记之前强制进行依次Minor gc。</p>
-</li>
-<li>Eden的使用空间大于“CMSScheduleRemarkEdenSizeThreshold”，这个参数的默认值是2M； </li>
-<li>Eden的使用率大于等于“CMSScheduleRemarkEdenPenetration”，这个参数的默认值是50%。</li>
-</ul>
-<p>5.（STW）重新标记：重新扫描堆中的对象，进行可达性分析,标记活着的对象。这个阶段扫描的目标是：新生代的对象 + Gc Roots + 前面被标记为dirty的card对应的老年代对象。如果预清理的工作没做好，这一步扫描新生代的时候就会花很多时间，导致这个阶段的停顿时间过长。这个过程是多线程的。</p>
-<ol>
-<li><p>并发清除：用户线程被重新激活，同时将那些未被标记为存活的对象标记为不可达；</p>
-</li>
-<li><p>并发重置：CMS内部重置回收器状态，准备进入下一个并发回收周期。</p>
-</li>
-</ol>
-<h1 id="三-3-CMS缺点"><a href="#三-3-CMS缺点" class="headerlink" title="三. 3.CMS缺点"></a>三. 3.CMS缺点</h1><ul>
-<li><p>CMS回收器采用的基础算法是Mark-Sweep。所有CMS不会整理、压缩堆空间。这样就会有一个问题：经过CMS收集的堆会产生空间碎片。 CMS不对堆空间整理压缩节约了垃圾回收的停顿时间，但也带来的堆空间的浪费。为了解决堆空间浪费问题，CMS回收器不再采用简单的指针指向一块可用堆空 间来为下次对象分配使用。而是把一些未分配的空间汇总成一个列表，当JVM分配对象空间的时候，会搜索这个列表找到足够大的空间来hold住这个对象。  </p>
-</li>
-<li><p>需要更多的CPU资源。从上面的图可以看到，为了让应用程序不停顿，CMS线程和应用程序线程并发执行，这样就需要有更多的CPU，单纯靠线程切 换是不靠谱的。并且，重新标记阶段，为空保证STW快速完成，也要用到更多的甚至所有的CPU资源。当然，多核多CPU也是未来的趋势！  </p>
-</li>
-<li><p>CMS的另一个缺点是它需要更大的堆空间。因为CMS标记阶段应用程序的线程还是在执行的，那么就会有堆空间继续分配的情况，为了保证在CMS回 收完堆之前还有空间分配给正在运行的应用程序，必须预留一部分空间。也就是说，CMS不会在老年代满的时候才开始收集。相反，它会尝试更早的开始收集，已 避免上面提到的情况：在回收完成之前，堆没有足够空间分配！默认当老年代使用68%的时候，CMS就开始行动了。 – XX:CMSInitiatingOccupancyFraction =n 来设置这个阀值。</p>
-</li>
-</ul>
-<p>总得来说，CMS回收器减少了回收的停顿时间，但是降低了堆空间的利用率。</p>
-
+        <h1 id="1-什么是ThreadLocal？"><a href="#1-什么是ThreadLocal？" class="headerlink" title="1. 什么是ThreadLocal？"></a>1. 什么是ThreadLocal？</h1><p>ThreadLocal称作线程本地存储。简单来说，就是ThreadLocal为共享变量在每个线程中都创建一个副本，每个线程可以访问自己内部的副本变量。这样做的好处是可以保证共享变量在<code>多线程环境下访问的线程安全性</code>。</p>
+<h1 id="2-ThreadLocal的使用"><a href="#2-ThreadLocal的使用" class="headerlink" title="2. ThreadLocal的使用"></a>2. ThreadLocal的使用</h1><p>引题：<br>在没有使用ThreadLocal的时候，定义了一个静态的成员变量num，然后通过构造5个线程对这个num做递增<br>
+        
+          <a class="article-more-a" href="/2018/12/05/ThreadLocal的使用及原理分析.html#more">阅读全文 >></a>
+        
       
 
       
-    </div>
+    </p></div>
     <div class="article-info article-info-index">
       
       
@@ -235,7 +191,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">JVM</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">-java -ThreadLocal</a>
         		</li>
       		
 		</ul>
@@ -282,20 +238,20 @@
 
 
   
-    <article id="post-RocketMQ事务相关源码" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+    <article id="post-浅入Java-ClassLoader" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/28/RocketMQ事务相关源码.html">RocketMQ事务相关源码</a>
+      <a class="article-title" href="/2018/12/05/浅入Java-ClassLoader.html">浅入Java ClassLoader</a>
     </h1>
   
 
         
-        <a href="/2018/11/28/RocketMQ事务相关源码.html" class="archive-article-date">
-  	<time datetime="2018-11-28T06:49:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-28</time>
+        <a href="/2018/12/05/浅入Java-ClassLoader.html" class="archive-article-date">
+  	<time datetime="2018-12-05T02:04:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-05</time>
 </a>
         
       </header>
@@ -306,9 +262,11 @@
 <!-- 目录内容结束 -->
     <div class="article-entry" itemprop="articleBody">
       
-        <p><code>源码基于4.3.2</code></p>
-<h2 id="1-客户端发送事务消息的部分"><a href="#1-客户端发送事务消息的部分" class="headerlink" title="1. 客户端发送事务消息的部分"></a>1. 客户端发送事务消息的部分</h2><p>源码位置 <code>org.apache.rocketmq.example.transaction.TransactionProducer</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//当RocketMQ发现`Prepared消息`时，会根据这个Listener实现的策略来决断事务</span></span><br><span class="line">TransactionListener transactionListener = <span class="keyword">new</span> TransactionListenerImpl();</span><br><span class="line"><span class="comment">// 构造事务消息的生产者</span></span><br><span class="line">TransactionMQProducer producer = <span class="keyword">new</span> TransactionMQProducer(<span class="string">"please_rename_unique_group_name"</span>);</span><br><span class="line"></span><br><span class="line">ExecutorService executorService = <span class="keyword">new</span> ThreadPoolExecutor(<span class="number">2</span>, <span class="number">5</span>, <span class="number">100</span>, TimeUnit.SECONDS, <span class="keyword">new</span> ArrayBlockingQueue&lt;Runnable&gt;(<span class="number">2000</span>), <span class="keyword">new</span> ThreadFactory() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Thread <span class="title">newThread</span><span class="params">(Runnable r)</span> </span>&#123;</span><br><span class="line">        Thread thread = <span class="keyword">new</span> Thread(r);</span><br><span class="line">        thread.setName(<span class="string">"client-transaction-msg-check-thread"</span>);</span><br><span class="line">        <span class="keyword">return</span> thread;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">producer.setExecutorService(executorService);</span><br><span class="line"><span class="comment">// 设置事务决断处理类</span></span><br><span class="line">producer.setTransactionListener(transactionListener);</span><br><span class="line">producer.start();</span><br><span class="line"></span><br><span class="line">String[] tags = <span class="keyword">new</span> String[] &#123;<span class="string">"TagA"</span>, <span class="string">"TagB"</span>, <span class="string">"TagC"</span>, <span class="string">"TagD"</span>, <span class="string">"TagE"</span>&#125;;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">//构建消息</span></span><br><span class="line">        Message msg =</span><br><span class="line">            <span class="keyword">new</span> Message(<span class="string">"TopicTest1234"</span>, tags[i % tags.length], <span class="string">"KEY"</span> + i,</span><br><span class="line">                (<span class="string">"Hello RocketMQ "</span> + i).getBytes(RemotingHelper.DEFAULT_CHARSET));</span><br><span class="line">        <span class="comment">//发送消息</span></span><br><span class="line">        SendResult sendResult = producer.sendMessageInTransaction(msg, <span class="keyword">null</span>);</span><br><span class="line">        System.out.printf(<span class="string">"%s%n"</span>, sendResult);</span><br><span class="line"></span><br><span class="line">        Thread.sleep(<span class="number">10</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (MQClientException | UnsupportedEncodingException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100000</span>; i++) &#123;</span><br><span class="line">    Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">&#125;</span><br><span class="line">producer.shutdown();</span><br></pre></td></tr></table></figure></p>
-
+        <h1 id="1-ClassLoader是做什么的？"><a href="#1-ClassLoader是做什么的？" class="headerlink" title="1. ClassLoader是做什么的？"></a>1. ClassLoader是做什么的？</h1><p>ClassLoader是用来加载Class 文件的。它负责将 Class 的字节码形式转换成内存形式的 Class 对象。字节码可以来自于磁盘文件 <em>.class，也可以是 jar 包里的 </em>.class，也可以来自远程服务器提供的字节流，字节码的本质就是一个字节数组 []byte，它有特定的复杂的内部格式。<br><img src="/image/jvm/byteArr2Class.png"></p>
+<h1 id="2-ClassLoader的特点"><a href="#2-ClassLoader的特点" class="headerlink" title="2.ClassLoader的特点"></a>2.ClassLoader的特点</h1>
+        
+          <a class="article-more-a" href="/2018/12/05/浅入Java-ClassLoader.html#more">阅读全文 >></a>
+        
       
 
       
@@ -316,7 +274,123 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">JVM</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">classloader</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/java//" class="article-tag-list-link color5">java</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-CMS学习笔记" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/04/CMS学习笔记.html">CMS学习笔记</a>
+    </h1>
+  
+
+        
+        <a href="/2018/12/04/CMS学习笔记.html" class="archive-article-date">
+  	<time datetime="2018-12-04T15:06:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-04</time>
+</a>
+        
+      </header>
+    
+
+    <!-- 目录内容 -->
+
+<!-- 目录内容结束 -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一-什么是cms及cms的适用场景"><a href="#一-什么是cms及cms的适用场景" class="headerlink" title="一. 什么是cms及cms的适用场景"></a>一. 什么是cms及cms的适用场景</h1><ol>
+<li>CMS ：Mostly-Concurrent收集器，也称并发标记清除收集器（Concurrent Mark-Sweep GC，CMS收集器），它管理新生代的方式与Parallel收集器和Serial收集器相同，而在老年代则是尽可能得并发执行，每个垃圾收集器周期只有2次短停顿。</li>
+<li>CMS的目的： 为了消除Throught收集器和Serial收集器在Full GC周期中的<code>长时间停顿</code>。</li>
+<li>CMS的使用场景：应用需要更快速的响应，不想长时间的停顿，前提条件是你的CPU资源比较丰富的条件下，适合使用CMS收集器。对于实时响应的任务，比如web server类似。
+        
+          <a class="article-more-a" href="/2018/12/04/CMS学习笔记.html#more">阅读全文 >></a>
+        
+      
+
+      
+    </li></ol></div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">JVM</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/java//" class="article-tag-list-link color5">java</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
 
       
 
@@ -377,34 +451,14 @@
 <li>隔离性或独立性(Isolation)</li>
 <li>持久性(Durabilily)  </li>
 </ul>
-<p>但是再往下,比如问到隔离性指的是什么的时候可能就不知道了，或者是知道隔离性是什么但是再问到数据库实现隔离的都有哪些级别，或者是每个级别他们有什么区别的时候可能就不知道了。</p>
-<h2 id="2-分布式事务"><a href="#2-分布式事务" class="headerlink" title="2. 分布式事务"></a>2. 分布式事务</h2><p>在数据库正常运行情况下的事务我们很好理解。但是当数据库在执行事务的时候突然宕机了，比如断电、关机等等，这个时候怎么能保证事务呢? 网上有很多相关的资料，大家可以了解下。<br>什么是分布式事务<br>分布式事务就是指事务的参与者、支持事务的服务器、资源服务器以及事务管理器分别位于不同的分布式系统的不同节点之上。简单的说，就是一次大的操作由不同的小操作组成，这些小的操作分布在不同的服务器上，且属于不同的应用，分布式事务需要保证这些小操作要么全部成功，要么全部失败。本质上来说，分布式事务就是为了保证不同数据库的数据一致性。<br>参考 <a href="https://mp.weixin.qq.com/s/W7XeNKIwB-JxnyStq0xD6g" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/W7XeNKIwB-JxnyStq0xD6g</a></p>
-<blockquote>
-<p><strong>分布式系统的核心就是处理各种异常情况。</strong> </p>
-</blockquote>
-<p>这也是分布式系统复杂的地方，因为分布式的网络环境很复杂，这种“断电”故障要比单机多很多，所以我们在做分布式系统的时候，最先考虑的就是这种情况。这些异常可能有 </p>
-<ul>
-<li>机器异常</li>
-<li>网络异常</li>
-<li>消息丢失、乱序 </li>
-<li>数据错误 </li>
-<li>不可靠的TCP </li>
-<li>存储数据丢失</li>
-<li>其他异常等等…</li>
-</ul>
-<h3 id="2-1-分布式理论"><a href="#2-1-分布式理论" class="headerlink" title="2.1 分布式理论"></a>2.1 分布式理论</h3><p>在分布式环境下，不可能做到满足事务的ACID特性。那么我们该怎么办呢？<br>现在常用的分布式事务方案是基于CAP定理的，何为CAP?</p>
-<p>CAP定理是由加州大学伯克利分校Eric Brewer教授提出来的，他指出WEB服务无法同时满足一下3个属性：</p>
-<ul>
-<li>一致性(Consistency) ： 客户端知道一系列的操作都会同时发生(生效)</li>
-<li>可用性(Availability) ： 每个操作都必须以可预期的响应结束</li>
-<li>分区容错性(Partition tolerance) ： 即使出现单个组件无法可用,操作依然可以完成<br>通俗的讲，在分布式环境下，最多只能满足CAP定理中的两个。但是任何策略都要依赖数据分区，一次最终我们要在一致性和可用性之间做出选择。</li>
-</ul>
-<p>对于CP来说，放弃可用性，追求一致性和分区容错性，我们的zookeeper其实就是追求的强一致。<br>对于AP来说，放弃一致性(这里说的一致性是强一致性)，追求分区容错性和可用性，这是很多分布式系统设计时的选择，后面的BASE也是根据AP来扩展。</p>
-
+<p>但是再往下,比如问到隔离性指的是什么的时候可能就不知道了，或者是知道隔离性是什么但是再问到数据库实现隔离的都有哪些级别，或者是每个级别他们有什么区别的时候可能就不知道了。<br>
+        
+          <a class="article-more-a" href="/2018/11/28/分布式事务初识.html#more">阅读全文 >></a>
+        
       
 
       
-    </div>
+    </p></div>
     <div class="article-info article-info-index">
       
       
@@ -917,86 +971,6 @@
 
 
   
-    <article id="post-java/jmap命令使用" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/19/java/jmap命令使用.html">jmap命令使用</a>
-    </h1>
-  
-
-        
-        <a href="/2018/04/19/java/jmap命令使用.html" class="archive-article-date">
-  	<time datetime="2018-04-19T08:22:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-19</time>
-</a>
-        
-      </header>
-    
-
-    <!-- 目录内容 -->
-
-<!-- 目录内容结束 -->
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="查看-JVM-堆内存情况"><a href="#查看-JVM-堆内存情况" class="headerlink" title="查看 JVM 堆内存情况"></a>查看 JVM 堆内存情况</h3><p>如果想分析自己的JAVA Application时，可以使用jmap程序来生成heapdump文例：<br><code>jmap -heap pid</code><br>jmap是JDK自带的一个工具，非常小巧方便，其支持参数如下：<br>    <code>-heap</code>：打印heap空间的概要，这里可以粗略的检验heap空间的使用情况。<br>官网对jmap的解释是:<br>
-        
-          <a class="article-more-a" href="/2018/04/19/java/jmap命令使用.html#more">阅读全文 >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">jvm</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">jmap</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -1098,11 +1072,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">oracle</a>
+                <a href="javascript:void(0)" class="js-tag color2">classloader</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+                <a href="javascript:void(0)" class="js-tag color2">oracle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1110,23 +1084,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">cordova</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">jquery</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">localStorage</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color3">源码</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1135,10 +1101,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">dubbo</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">源码</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1182,11 +1144,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Multipartfile</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+                <a href="javascript:void(0)" class="js-tag color3">cordova</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">localStorage</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">jquery</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1194,11 +1168,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">分布式ID</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ELK</a>
+                <a href="javascript:void(0)" class="js-tag color1">图片加水印</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1210,7 +1188,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+                <a href="javascript:void(0)" class="js-tag color3">运维</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ELK</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">elk</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1218,7 +1204,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">运维</a>
+                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1230,11 +1216,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">elk</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">图片加水印</a>
+                <a href="javascript:void(0)" class="js-tag color4">-java -ThreadLocal</a>
               </li>
             
             <div class="clearfix"></div>

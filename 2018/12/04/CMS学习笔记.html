@@ -19,7 +19,7 @@
 <meta property="og:image" content="https://jjlu521016.github.io/image/cms/stw.png">
 <meta property="og:image" content="https://jjlu521016.github.io/image/cms/Concurrent-marking.png">
 <meta property="og:image" content="https://jjlu521016.github.io/image/cms/cms-code.webp">
-<meta property="og:updated_time" content="2018-12-04T15:47:46.431Z">
+<meta property="og:updated_time" content="2018-12-05T13:03:42.848Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CMS学习笔记">
 <meta name="twitter:description" content="一. 什么是cms及cms的适用场景 CMS ：Mostly-Concurrent收集器，也称并发标记清除收集器（Concurrent Mark-Sweep GC，CMS收集器），它管理新生代的方式与Parallel收集器和Serial收集器相同，而在老年代则是尽可能得并发执行，每个垃圾收集器周期只有2次短停顿。 CMS的目的： 为了消除Throught收集器和Serial收集器在Full GC周">
@@ -208,9 +208,10 @@
         <h1 id="一-什么是cms及cms的适用场景"><a href="#一-什么是cms及cms的适用场景" class="headerlink" title="一. 什么是cms及cms的适用场景"></a>一. 什么是cms及cms的适用场景</h1><ol>
 <li>CMS ：Mostly-Concurrent收集器，也称并发标记清除收集器（Concurrent Mark-Sweep GC，CMS收集器），它管理新生代的方式与Parallel收集器和Serial收集器相同，而在老年代则是尽可能得并发执行，每个垃圾收集器周期只有2次短停顿。</li>
 <li>CMS的目的： 为了消除Throught收集器和Serial收集器在Full GC周期中的<code>长时间停顿</code>。</li>
-<li>CMS的使用场景：应用需要更快速的响应，不想长时间的停顿，前提条件是你的CPU资源比较丰富的条件下，适合使用CMS收集器。对于实时响应的任务，比如web server类似。</li>
+<li>CMS的使用场景：应用需要更快速的响应，不想长时间的停顿，前提条件是你的CPU资源比较丰富的条件下，适合使用CMS收集器。对于实时响应的任务，比如web server类似。<a id="more"></a>
+<h1 id="二-CMS的过程"><a href="#二-CMS的过程" class="headerlink" title="二. CMS的过程"></a>二. CMS的过程</h1></li>
 </ol>
-<h1 id="二-CMS的过程"><a href="#二-CMS的过程" class="headerlink" title="二. CMS的过程"></a>二. CMS的过程</h1><ul>
+<ul>
 <li>初始标记(STW initial mark) </li>
 <li>并发标记(Concurrent marking) </li>
 <li>并发预清理(Concurrent precleaning) </li>
@@ -266,7 +267,7 @@
             <span class="tooltip-content">
               <span class="tooltip-text">
                 <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>觉得对您有用的话   就打赏一下吧！<i class="icon icon-quo-right"></i></p>
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢您的打赏！！<i class="icon icon-quo-right"></i></p>
                   <div class="reward-box">
                     
                     <div class="reward-box-item">
@@ -378,9 +379,18 @@
   
 <nav id="article-nav">
   
+    <a href="/2018/12/05/浅入Java-ClassLoader.html" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          浅入Java ClassLoader
+        
+      </div>
+    </a>
   
-    <a href="/2018/11/28/RocketMQ事务相关源码.html" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">RocketMQ事务相关源码</div>
+  
+    <a href="/2018/11/28/分布式事务初识.html" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">分布式事务初识</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -427,21 +437,27 @@
   
 
   
-  <div id="gitment-ctn"></div> 
-<link rel="stylesheet" href="https://billts.site/extra_css/gitment.css">
-<script src="/./gitment.js"></script>
+
+  
+    <section id="comments" style="margin:10px;padding:10px;background:#fff;">
+      <div id="vcomment" class="comment"></div> 
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
 <script>
-var gitment = new Gitment({
-  id: 'Tue Dec 04 2018 23:06:59 GMT+0800',
-  owner: 'jjlu521016',
-  repo: 'jjlu521016.github.io',
-  oauth: {
-    client_id: 'd8527a9b07d5811879a8',
-    client_secret: 'db142a6624b2422afa80827103b630a0cb282d32',
-  },
-})
-gitment.render('gitment-ctn')
-</script>
+  var notify = 'false' == true ? true : false;
+  var verify = 'false' == true ? true : false;
+    
+new Valine({
+    el: '#vcomment',
+    notify: notify,
+    verify: verify,
+    app_id: "Q9zeUeYgUa2Os7w69PCpy64m-gzGzoHsz",
+    app_key: "51CyMshO4ifGDgASSli1xLF7",
+    placeholder: "ヾﾉ≧∀≦)o发表您的意见",
+    avatar:""
+});
+</script> 
+    </section>
   
 
 
@@ -537,11 +553,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">oracle</a>
+                <a href="javascript:void(0)" class="js-tag color2">classloader</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+                <a href="javascript:void(0)" class="js-tag color2">oracle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -549,23 +565,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">cordova</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">jquery</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">localStorage</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color3">源码</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -574,10 +582,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">dubbo</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">源码</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -621,11 +625,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Multipartfile</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+                <a href="javascript:void(0)" class="js-tag color3">cordova</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">localStorage</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">jquery</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -633,11 +649,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">分布式ID</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ELK</a>
+                <a href="javascript:void(0)" class="js-tag color1">图片加水印</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -649,7 +669,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+                <a href="javascript:void(0)" class="js-tag color3">运维</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ELK</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">elk</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -657,7 +685,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">运维</a>
+                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -669,11 +697,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">elk</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">图片加水印</a>
+                <a href="javascript:void(0)" class="js-tag color4">-java -ThreadLocal</a>
               </li>
             
             <div class="clearfix"></div>

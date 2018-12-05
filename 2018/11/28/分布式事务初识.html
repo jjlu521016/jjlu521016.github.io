@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="jjlu521016">
 <meta property="og:description" content="1. 数据库事务认知在开发中，我们常接触的及时数据库事务。但是一般人都知道数据库事务的几个特新ACID:  原子性(Atomicity) 一致性( Consistency  隔离性或独立性(Isolation) 持久性(Durabilily)    但是再往下,比如问到隔离性指的是什么的时候可能就不知道了，或者是知道隔离性是什么但是再问到数据库实现隔离的都有哪些级别，或者是每个级别他们有什么区别的">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-12-04T15:56:29.635Z">
+<meta property="og:updated_time" content="2018-12-05T13:03:42.849Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="分布式事务初识">
 <meta name="twitter:description" content="1. 数据库事务认知在开发中，我们常接触的及时数据库事务。但是一般人都知道数据库事务的几个特新ACID:  原子性(Atomicity) 一致性( Consistency  隔离性或独立性(Isolation) 持久性(Durabilily)    但是再往下,比如问到隔离性指的是什么的时候可能就不知道了，或者是知道隔离性是什么但是再问到数据库实现隔离的都有哪些级别，或者是每个级别他们有什么区别的">
@@ -208,7 +208,7 @@
 <li>隔离性或独立性(Isolation)</li>
 <li>持久性(Durabilily)  </li>
 </ul>
-<p>但是再往下,比如问到隔离性指的是什么的时候可能就不知道了，或者是知道隔离性是什么但是再问到数据库实现隔离的都有哪些级别，或者是每个级别他们有什么区别的时候可能就不知道了。</p>
+<p>但是再往下,比如问到隔离性指的是什么的时候可能就不知道了，或者是知道隔离性是什么但是再问到数据库实现隔离的都有哪些级别，或者是每个级别他们有什么区别的时候可能就不知道了。<br><a id="more"></a></p>
 <h2 id="2-分布式事务"><a href="#2-分布式事务" class="headerlink" title="2. 分布式事务"></a>2. 分布式事务</h2><p>在数据库正常运行情况下的事务我们很好理解。但是当数据库在执行事务的时候突然宕机了，比如断电、关机等等，这个时候怎么能保证事务呢? 网上有很多相关的资料，大家可以了解下。<br>什么是分布式事务<br>分布式事务就是指事务的参与者、支持事务的服务器、资源服务器以及事务管理器分别位于不同的分布式系统的不同节点之上。简单的说，就是一次大的操作由不同的小操作组成，这些小的操作分布在不同的服务器上，且属于不同的应用，分布式事务需要保证这些小操作要么全部成功，要么全部失败。本质上来说，分布式事务就是为了保证不同数据库的数据一致性。<br>参考 <a href="https://mp.weixin.qq.com/s/W7XeNKIwB-JxnyStq0xD6g" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/W7XeNKIwB-JxnyStq0xD6g</a></p>
 <blockquote>
 <p><strong>分布式系统的核心就是处理各种异常情况。</strong> </p>
@@ -244,7 +244,7 @@
             <span class="tooltip-content">
               <span class="tooltip-text">
                 <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>觉得对您有用的话   就打赏一下吧！<i class="icon icon-quo-right"></i></p>
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢您的打赏！！<i class="icon icon-quo-right"></i></p>
                   <div class="reward-box">
                     
                     <div class="reward-box-item">
@@ -345,11 +345,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/11/28/RocketMQ事务相关源码.html" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/12/04/CMS学习笔记.html" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          RocketMQ事务相关源码
+          CMS学习笔记
         
       </div>
     </a>
@@ -403,21 +403,27 @@
   
 
   
-  <div id="gitment-ctn"></div> 
-<link rel="stylesheet" href="https://billts.site/extra_css/gitment.css">
-<script src="/./gitment.js"></script>
+
+  
+    <section id="comments" style="margin:10px;padding:10px;background:#fff;">
+      <div id="vcomment" class="comment"></div> 
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
 <script>
-var gitment = new Gitment({
-  id: 'Wed Nov 28 2018 12:11:59 GMT+0800',
-  owner: 'jjlu521016',
-  repo: 'jjlu521016.github.io',
-  oauth: {
-    client_id: 'd8527a9b07d5811879a8',
-    client_secret: 'db142a6624b2422afa80827103b630a0cb282d32',
-  },
-})
-gitment.render('gitment-ctn')
-</script>
+  var notify = 'false' == true ? true : false;
+  var verify = 'false' == true ? true : false;
+    
+new Valine({
+    el: '#vcomment',
+    notify: notify,
+    verify: verify,
+    app_id: "Q9zeUeYgUa2Os7w69PCpy64m-gzGzoHsz",
+    app_key: "51CyMshO4ifGDgASSli1xLF7",
+    placeholder: "ヾﾉ≧∀≦)o发表您的意见",
+    avatar:""
+});
+</script> 
+    </section>
   
 
 
@@ -513,11 +519,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">oracle</a>
+                <a href="javascript:void(0)" class="js-tag color2">classloader</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+                <a href="javascript:void(0)" class="js-tag color2">oracle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -525,23 +531,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">cordova</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">jquery</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">localStorage</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color3">源码</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -550,10 +548,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">dubbo</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">源码</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -597,11 +591,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Multipartfile</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+                <a href="javascript:void(0)" class="js-tag color3">cordova</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">localStorage</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">jquery</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -609,11 +615,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">分布式ID</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ELK</a>
+                <a href="javascript:void(0)" class="js-tag color1">图片加水印</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -625,7 +635,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+                <a href="javascript:void(0)" class="js-tag color3">运维</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ELK</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">elk</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -633,7 +651,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">运维</a>
+                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -645,11 +663,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">elk</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">图片加水印</a>
+                <a href="javascript:void(0)" class="js-tag color4">-java -ThreadLocal</a>
               </li>
             
             <div class="clearfix"></div>
