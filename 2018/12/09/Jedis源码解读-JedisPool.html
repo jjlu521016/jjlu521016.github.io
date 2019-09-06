@@ -8,17 +8,17 @@
   <link rel="dns-prefetch" href="https://jjlu521016.github.io">
   <title>Jedis源码解读-JedisPool | jjlu521016</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1. 什么是对象池对于一个对象，在其生命周期大致可以分为 创建 -&amp;gt; 使用 -&amp;gt; 销毁三大阶段，这个对象的时间是 T1(创建)+T2(使用)+T3(销毁)，对于创建N个对象都需要这个步骤的话，肯定很耗时并且消耗性能的。">
+  <meta name="description" content="1. 什么是对象池对于一个对象，其生命周期大致可以分为 创建 -&amp;gt; 使用 -&amp;gt; 销毁三大阶段，这个对象的时间是 T1(创建)+T2(使用)+T3(销毁)，对于创建N个对象都需要这个步骤的话，肯定很耗时并且消耗性能的。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Jedis源码解读-JedisPool">
 <meta property="og:url" content="https://jjlu521016.github.io/2018/12/09/Jedis源码解读-JedisPool.html">
 <meta property="og:site_name" content="jjlu521016">
-<meta property="og:description" content="1. 什么是对象池对于一个对象，在其生命周期大致可以分为 创建 -&amp;gt; 使用 -&amp;gt; 销毁三大阶段，这个对象的时间是 T1(创建)+T2(使用)+T3(销毁)，对于创建N个对象都需要这个步骤的话，肯定很耗时并且消耗性能的。">
+<meta property="og:description" content="1. 什么是对象池对于一个对象，其生命周期大致可以分为 创建 -&amp;gt; 使用 -&amp;gt; 销毁三大阶段，这个对象的时间是 T1(创建)+T2(使用)+T3(销毁)，对于创建N个对象都需要这个步骤的话，肯定很耗时并且消耗性能的。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-12-09T15:59:00.752Z">
+<meta property="og:updated_time" content="2018-12-11T14:25:39.140Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Jedis源码解读-JedisPool">
-<meta name="twitter:description" content="1. 什么是对象池对于一个对象，在其生命周期大致可以分为 创建 -&amp;gt; 使用 -&amp;gt; 销毁三大阶段，这个对象的时间是 T1(创建)+T2(使用)+T3(销毁)，对于创建N个对象都需要这个步骤的话，肯定很耗时并且消耗性能的。">
+<meta name="twitter:description" content="1. 什么是对象池对于一个对象，其生命周期大致可以分为 创建 -&amp;gt; 使用 -&amp;gt; 销毁三大阶段，这个对象的时间是 T1(创建)+T2(使用)+T3(销毁)，对于创建N个对象都需要这个步骤的话，肯定很耗时并且消耗性能的。">
   
   
     <link rel="icon" href="/favicon.png">
@@ -200,20 +200,20 @@
 <!-- 目录内容结束 -->
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="1-什么是对象池"><a href="#1-什么是对象池" class="headerlink" title="1. 什么是对象池"></a>1. 什么是对象池</h1><p>对于一个对象，在其生命周期大致可以分为 <code>创建 -&gt; 使用 -&gt; 销毁</code>三大阶段，这个对象的时间是 T1(创建)+T2(使用)+T3(销毁)，<br>对于创建N个对象都需要这个步骤的话，肯定很耗时并且消耗性能的。<br><a id="more"></a><br><strong> 官方对于对象池的解释是：</strong></p>
+        <h1 id="1-什么是对象池"><a href="#1-什么是对象池" class="headerlink" title="1. 什么是对象池"></a>1. 什么是对象池</h1><p>对于一个对象，其生命周期大致可以分为 <code>创建 -&gt; 使用 -&gt; 销毁</code>三大阶段，这个对象的时间是 T1(创建)+T2(使用)+T3(销毁)，<br>对于创建N个对象都需要这个步骤的话，肯定很耗时并且消耗性能的。<br><a id="more"></a><br><strong> 官方对于对象池的解释是：</strong></p>
 <blockquote>
 <p>　将用过的对象保存起来,等下次需要这种对象的时候再拿出来重复使用,从而在一定程度上减少频繁创建对象所造成的开销,用于充当保存对象的”容器”对象,被称为”对象池”。</p>
 </blockquote>
-<h1 id="2-JedisPool的创建"><a href="#2-JedisPool的创建" class="headerlink" title="2. JedisPool的创建"></a>2. JedisPool的创建</h1><p>Jedis的连接池是基于apache.common.pool2,因此jedisPool的实现都是基于Pool2。<br>关于pool2的源码文档开业参考<br><a href="http://commons.apache.org/proper/commons-pool/" target="_blank" rel="noopener">http://commons.apache.org/proper/commons-pool/</a></p>
-<p><image src="/image/jedis/jedisPool.png"><br>JedisPool是common-pool2的Pool抽象类的子类。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JedisPoolAbstract</span> <span class="keyword">extends</span> <span class="title">Pool</span>&lt;<span class="title">Jedis</span>&gt; </span>&#123;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></image></p>
-<p>其中JedisPool构造函数最终都是调用了Pool#initPool的方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> redis.clients.jedis.util;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Pool</span>&lt;<span class="title">T</span>&gt; <span class="keyword">implements</span> <span class="title">Closeable</span> </span>&#123;</span><br><span class="line">  <span class="keyword">protected</span> GenericObjectPool&lt;T&gt; internalPool;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Using this constructor means you have to set and initialize the internalPool yourself.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">Pool</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">Pool</span><span class="params">(<span class="keyword">final</span> GenericObjectPoolConfig poolConfig, PooledObjectFactory&lt;T&gt; factory)</span> </span>&#123;</span><br><span class="line">    initPool(poolConfig, factory);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    destroy();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isClosed</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.internalPool.isClosed();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initPool</span><span class="params">(<span class="keyword">final</span> GenericObjectPoolConfig poolConfig, PooledObjectFactory&lt;T&gt; factory)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.internalPool != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        closeInternalPool();</span><br><span class="line">      &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    # 实例化pool2中的GenericeObjectPool</span><br><span class="line">    <span class="keyword">this</span>.internalPool = <span class="keyword">new</span> GenericObjectPool&lt;T&gt;(factory, poolConfig);</span><br><span class="line">  &#125;</span><br><span class="line">  # 从JedisPool获取Jedis和释放Jedis实例， </span><br><span class="line">  <span class="function"><span class="keyword">public</span> T <span class="title">getResource</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      # 阅读源码位置 org.apache.commons.pool2.impl#borrowObject</span><br><span class="line">      <span class="keyword">return</span> internalPool.borrowObject();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (NoSuchElementException nse) &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">null</span> == nse.getCause()) &#123; <span class="comment">// The exception was caused by an exhausted pool</span></span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> JedisExhaustedPoolException(</span><br><span class="line">            <span class="string">"Could not get a resource since the pool is exhausted"</span>, nse);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// Otherwise, the exception was caused by the implemented activateObject() or ValidateObject()</span></span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> JedisException(<span class="string">"Could not get a resource from the pool"</span>, nse);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> JedisConnectionException(<span class="string">"Could not get a resource from the pool"</span>, e);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">returnResourceObject</span><span class="params">(<span class="keyword">final</span> T resource)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (resource == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      internalPool.returnObject(resource);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> JedisException(<span class="string">"Could not return the resource to the pool"</span>, e);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
-<p>initPool方法中有两个参数：一个GenericObjectPoolConfig配置项分装类，一个是 PooledObjectFactory工厂类获取到连接池后从连接池中获取jedis连接对象。<br>根据配置信息实例化pool2中的GenericeObjectPool这个对象池的管理者。</p>
+<h1 id="2-JedisPool的创建"><a href="#2-JedisPool的创建" class="headerlink" title="2. JedisPool的创建"></a>2. JedisPool的创建</h1><p>Jedis的连接池是基于apache.common.pool2,因此jedisPool的实现都是基于Pool2。<br>关于pool2的源码文档可以参考<br><a href="http://commons.apache.org/proper/commons-pool/" target="_blank" rel="noopener">http://commons.apache.org/proper/commons-pool/</a></p>
+<p><image src="/image/jedis/jedisPool.png"><br>JedisPool是Pool抽象类的子类。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JedisPoolAbstract</span> <span class="keyword">extends</span> <span class="title">Pool</span>&lt;<span class="title">Jedis</span>&gt; </span>&#123;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></image></p>
+<p>其中JedisPool构造函数最终都是调用了Pool#initPool的方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> redis.clients.jedis.util;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Pool</span>&lt;<span class="title">T</span>&gt; <span class="keyword">implements</span> <span class="title">Closeable</span> </span>&#123;</span><br><span class="line">  <span class="keyword">protected</span> GenericObjectPool&lt;T&gt; internalPool;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">Pool</span><span class="params">(<span class="keyword">final</span> GenericObjectPoolConfig poolConfig, PooledObjectFactory&lt;T&gt; factory)</span> </span>&#123;</span><br><span class="line">    initPool(poolConfig, factory);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    destroy();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isClosed</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.internalPool.isClosed();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initPool</span><span class="params">(<span class="keyword">final</span> GenericObjectPoolConfig poolConfig, PooledObjectFactory&lt;T&gt; factory)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.internalPool != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        closeInternalPool();</span><br><span class="line">      &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    # 实例化pool2中的GenericeObjectPool</span><br><span class="line">    <span class="keyword">this</span>.internalPool = <span class="keyword">new</span> GenericObjectPool&lt;T&gt;(factory, poolConfig);</span><br><span class="line">  &#125;</span><br><span class="line">  # 从JedisPool获取Jedis和释放Jedis实例， </span><br><span class="line">  <span class="function"><span class="keyword">public</span> T <span class="title">getResource</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      # 阅读源码位置 org.apache.commons.pool2.impl#borrowObject</span><br><span class="line">      <span class="keyword">return</span> internalPool.borrowObject();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (NoSuchElementException nse) &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">null</span> == nse.getCause()) &#123; <span class="comment">// The exception was caused by an exhausted pool</span></span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> JedisExhaustedPoolException(</span><br><span class="line">            <span class="string">"Could not get a resource since the pool is exhausted"</span>, nse);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// Otherwise, the exception was caused by the implemented activateObject() or ValidateObject()</span></span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> JedisException(<span class="string">"Could not get a resource from the pool"</span>, nse);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> JedisConnectionException(<span class="string">"Could not get a resource from the pool"</span>, e);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">returnResourceObject</span><span class="params">(<span class="keyword">final</span> T resource)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (resource == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      internalPool.returnObject(resource);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> JedisException(<span class="string">"Could not return the resource to the pool"</span>, e);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>initPool方法中有两个参数：一个GenericObjectPoolConfig配置项封装类，一个是 PooledObjectFactory工厂类获取到连接池后从连接池中获取jedis连接对象。<br>根据配置信息实例化pool2中的GenericeObjectPool这个对象池的管理者。</p>
 <p>当调用 getResource 获取Jedis时， 实际上是Pool内部的internalPool调用borrowObject()拿到一个实例 ，而internalPool 这个 GenericObjectPool 又调用了 JedisFactory 的 makeObject() 来完成实例的生成 (在Pool中资源不够的时候)</p>
 <h1 id="Jedis是如何实例化的"><a href="#Jedis是如何实例化的" class="headerlink" title="Jedis是如何实例化的"></a>Jedis是如何实例化的</h1><p>我们先看下JedisFactory的源码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">JedisFactory</span> <span class="keyword">implements</span> <span class="title">PooledObjectFactory</span>&lt;<span class="title">Jedis</span>&gt; </span>&#123;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> PooledObject&lt;Jedis&gt; <span class="title">makeObject</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> HostAndPort hostAndPort = <span class="keyword">this</span>.hostAndPort.get();</span><br><span class="line">    <span class="keyword">final</span> Jedis jedis = <span class="keyword">new</span> Jedis(hostAndPort.getHost(), hostAndPort.getPort(), connectionTimeout,</span><br><span class="line">        soTimeout, ssl, sslSocketFactory, sslParameters, hostnameVerifier);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      jedis.connect();</span><br><span class="line">      <span class="keyword">if</span> (password != <span class="keyword">null</span>) &#123;</span><br><span class="line">        jedis.auth(password);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (database != <span class="number">0</span>) &#123;</span><br><span class="line">        jedis.select(database);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (clientName != <span class="keyword">null</span>) &#123;</span><br><span class="line">        jedis.clientSetname(clientName);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (JedisException je) &#123;</span><br><span class="line">      jedis.close();</span><br><span class="line">      <span class="keyword">throw</span> je;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> DefaultPooledObject&lt;Jedis&gt;(jedis);</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>JedisFactory实现了pool2的PooledObjectFactory接口,池中对象创建和销毁的接口，交由业务方（就是文中的JedisFactory来实现））。<br>在JedisFactory#makeObject()方法中创建了Jedis对象。<br>Jedis继承自BinaryJedis，其有一个Client属性，Client是Connection的子类，Connection中有socket这个属性，也就是真正跟redis服务端创建连接的类，并且这个socket是个长连接。</p>
-<p><image src="/image/jedis/jedis.png"><br>`redis.clients.jedis.Connection#connect<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">connect</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!isConnected()) &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        socket = <span class="keyword">new</span> Socket();</span><br><span class="line">        <span class="comment">// -&gt;@wjw_add</span></span><br><span class="line">        socket.setReuseAddress(<span class="keyword">true</span>);</span><br><span class="line">        #建立长连接</span><br><span class="line">        socket.setKeepAlive(<span class="keyword">true</span>); <span class="comment">// Will monitor the TCP connection is</span></span><br><span class="line">        <span class="comment">// valid</span></span><br><span class="line">        socket.setTcpNoDelay(<span class="keyword">true</span>); <span class="comment">// Socket buffer Whetherclosed, to</span></span><br><span class="line">        <span class="comment">// ensure timely delivery of data</span></span><br><span class="line">        socket.setSoLinger(<span class="keyword">true</span>, <span class="number">0</span>); <span class="comment">// Control calls close () method,</span></span><br><span class="line">        <span class="comment">// the underlying socket is closed</span></span><br><span class="line">        <span class="comment">// immediately</span></span><br><span class="line">        <span class="comment">// &lt;-@wjw_add</span></span><br><span class="line"></span><br><span class="line">        socket.connect(<span class="keyword">new</span> InetSocketAddress(host, port), connectionTimeout);</span><br><span class="line">        socket.setSoTimeout(soTimeout);</span><br><span class="line">        ......</span><br><span class="line">        outputStream = <span class="keyword">new</span> RedisOutputStream(socket.getOutputStream());</span><br><span class="line">        inputStream = <span class="keyword">new</span> RedisInputStream(socket.getInputStream());</span><br><span class="line">      &#125; <span class="keyword">catch</span> (IOException ex) &#123;</span><br><span class="line">        broken = <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> JedisConnectionException(<span class="string">"Failed connecting to host "</span> </span><br><span class="line">            + host + <span class="string">":"</span> + port, ex);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></image></p>
+<p>JedisFactory实现了pool2的PooledObjectFactory接口,池中对象创建和销毁的接口，交由业务方（就是文中的JedisFactory来实现）。<br>在JedisFactory#makeObject()方法中创建了Jedis对象。<br>Jedis继承自BinaryJedis，其有一个Client属性，Client是Connection的子类，Connection中有socket这个属性，也就是真正跟redis服务端创建连接的类，并且这个socket是个长连接。</p>
+<p><image src="/image/jedis/jedis.png"><br><code>redis.clients.jedis.Connection#connect</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">connect</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!isConnected()) &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        socket = <span class="keyword">new</span> Socket();</span><br><span class="line">        <span class="comment">// -&gt;@wjw_add</span></span><br><span class="line">        socket.setReuseAddress(<span class="keyword">true</span>);</span><br><span class="line">        #建立长连接</span><br><span class="line">        socket.setKeepAlive(<span class="keyword">true</span>); <span class="comment">// Will monitor the TCP connection is</span></span><br><span class="line">        <span class="comment">// valid</span></span><br><span class="line">        socket.setTcpNoDelay(<span class="keyword">true</span>); <span class="comment">// Socket buffer Whetherclosed, to</span></span><br><span class="line">        <span class="comment">// ensure timely delivery of data</span></span><br><span class="line">        socket.setSoLinger(<span class="keyword">true</span>, <span class="number">0</span>); <span class="comment">// Control calls close () method,</span></span><br><span class="line">        <span class="comment">// the underlying socket is closed</span></span><br><span class="line">        <span class="comment">// immediately</span></span><br><span class="line">        <span class="comment">// &lt;-@wjw_add</span></span><br><span class="line"></span><br><span class="line">        socket.connect(<span class="keyword">new</span> InetSocketAddress(host, port), connectionTimeout);</span><br><span class="line">        socket.setSoTimeout(soTimeout);</span><br><span class="line">        ......</span><br><span class="line">        outputStream = <span class="keyword">new</span> RedisOutputStream(socket.getOutputStream());</span><br><span class="line">        inputStream = <span class="keyword">new</span> RedisInputStream(socket.getInputStream());</span><br><span class="line">      &#125; <span class="keyword">catch</span> (IOException ex) &#123;</span><br><span class="line">        broken = <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> JedisConnectionException(<span class="string">"Failed connecting to host "</span> </span><br><span class="line">            + host + <span class="string">":"</span> + port, ex);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></image></p>
 <p>  从上面的源码可以看到，Jedis和网络连接是一一绑定的，假如redis对象被GC了，那么它的client和socket连接一并销毁。</p>
-<h1 id="客户端归还对象池"><a href="#客户端归还对象池" class="headerlink" title="客户端归还对象池"></a>客户端归还对象池</h1><p>  归还池的处理规则是由common-pool2来实现的，就是把jedis对象放到空闲队列中，如果队列满了，就将其直接销毁，销毁是在JedisFactory实现的<br>  redis.clients.jedis.JedisFactory#destroyObject<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroyObject</span><span class="params">(PooledObject&lt;Jedis&gt; pooledJedis)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">  <span class="keyword">final</span> BinaryJedis jedis = pooledJedis.getObject();</span><br><span class="line">  <span class="keyword">if</span> (jedis.isConnected()) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        jedis.quit();</span><br><span class="line">      &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">      &#125;</span><br><span class="line">      jedis.disconnect();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="客户端归还对象池"><a href="#客户端归还对象池" class="headerlink" title="客户端归还对象池"></a>客户端归还对象池</h1><p>  归还池的处理规则是由common-pool2来实现的，就是把jedis对象放到空闲队列中，如果队列满了，就将其直接销毁，销毁是在JedisFactory实现的<br>  <code>redis.clients.jedis.JedisFactory#destroyObject</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroyObject</span><span class="params">(PooledObject&lt;Jedis&gt; pooledJedis)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">  <span class="keyword">final</span> BinaryJedis jedis = pooledJedis.getObject();</span><br><span class="line">  <span class="keyword">if</span> (jedis.isConnected()) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        jedis.quit();</span><br><span class="line">      &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">      &#125;</span><br><span class="line">      jedis.disconnect();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>  当主动关闭socket连接，在common-pool2中的GenericObjectPool也会把他从空闲池和总池中移除。</p>
 
       
@@ -328,8 +328,8 @@
     </a>
   
   
-    <a href="/2018/12/08/Jedis源码阅读笔记.html" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Jedis源码阅读笔记(v3.0.0)</div>
+    <a href="/2018/12/07/运维/kibana-6-2-4-集成sentinl报警.html" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">kibana(6.2.4)集成sentinl报警</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -408,7 +408,7 @@ new Valine({
         <div id="footer-info">
             <div class="footer-left">
                 &copy;
-                2018
+                2019
                     jjlu521016
             </div>
             <!-- <div class="footer-right">
@@ -484,11 +484,43 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">elk</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">集群</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">log</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">rabbitmq</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">分布式事务</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">-java -ThreadLocal</a>
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">threadlocal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">redis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">dubbo</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">jvm</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -504,10 +536,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">源码</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
               </li>
              
@@ -517,10 +545,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">exception</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">dubbo</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -536,10 +560,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">springboot</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">spring</a>
               </li>
              
@@ -548,15 +568,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">jvm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">jmap</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Multipartfile</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -564,7 +580,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Multipartfile</a>
+                <a href="javascript:void(0)" class="js-tag color3">GC</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -576,19 +592,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">cordova</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">jquery</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -596,15 +600,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">分布式ID</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Kafka</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">集群</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -620,10 +616,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">elk</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">cat</a>
               </li>
              
@@ -632,11 +624,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">图片加水印</a>
+                <a href="javascript:void(0)" class="js-tag color2">classloader</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">classloader</a>
+                <a href="javascript:void(0)" class="js-tag color4">微服务</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">翻译 </a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">翻译</a>
               </li>
             
             <div class="clearfix"></div>

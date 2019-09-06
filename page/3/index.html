@@ -150,20 +150,20 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-js/Jquery中-attr和-data的区别" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+    <article id="post-java/浅入Java-ClassLoader" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/16/js/Jquery中-attr和-data的区别.html">Jquery中.attr和.data的区别</a>
+      <a class="article-title" href="/2018/12/05/java/浅入Java-ClassLoader.html">浅入Java ClassLoader</a>
     </h1>
   
 
         
-        <a href="/2018/03/16/js/Jquery中-attr和-data的区别.html" class="archive-article-date">
-  	<time datetime="2018-03-16T09:10:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-16</time>
+        <a href="/2018/12/05/java/浅入Java-ClassLoader.html" class="archive-article-date">
+  	<time datetime="2018-12-05T02:04:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-05</time>
 </a>
         
       </header>
@@ -174,83 +174,10 @@
 <!-- 目录内容结束 -->
     <div class="article-entry" itemprop="articleBody">
       
-        <p>$.attr()和$.data()本质上属于 <code>DOM属性</code> 和 <code>Jquery对象属性</code> 的区别：</p>
-<ul>
-<li>$.attr()每次都从DOM元素中取属性的值。</li>
-<li>$.attr(‘data-xxx’, ‘xxxxx’)会将字符串’xxxx’塞到标签的’data-xxx’属性中。
+        <h1 id="1-ClassLoader是做什么的？"><a href="#1-ClassLoader是做什么的？" class="headerlink" title="1. ClassLoader是做什么的？"></a>1. ClassLoader是做什么的？</h1><p>ClassLoader是用来加载Class 文件的。它负责将 Class 的字节码形式转换成内存形式的 Class 对象。字节码可以来自于磁盘文件 <em>.class，也可以是 jar 包里的 </em>.class，也可以来自远程服务器提供的字节流，字节码的本质就是一个字节数组 []byte，它有特定的复杂的内部格式。<br><img src="/image/jvm/byteArr2Class.png"></p>
+<h1 id="2-ClassLoader的特点"><a href="#2-ClassLoader的特点" class="headerlink" title="2.ClassLoader的特点"></a>2.ClassLoader的特点</h1>
         
-          <a class="article-more-a" href="/2018/03/16/js/Jquery中-attr和-data的区别.html#more">阅读全文 >></a>
-        
-      
-
-      
-    </li></ul></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-DB/mybatis-chose-when条件的坑" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/15/DB/mybatis-chose-when条件的坑.html">mybatis chose when条件的坑</a>
-    </h1>
-  
-
-        
-        <a href="/2018/03/15/DB/mybatis-chose-when条件的坑.html" class="archive-article-date">
-  	<time datetime="2018-03-15T11:03:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-15</time>
-</a>
-        
-      </header>
-    
-
-    <!-- 目录内容 -->
-
-<!-- 目录内容结束 -->
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在使用mybatis 条件判断的时候，我们最常用的是: </p>
-<ol>
-<li><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">""</span>&gt;</span><span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">choose</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">when</span> <span class="attr">test</span>=<span class="string">"title != null"</span>&gt;</span></span><br><span class="line">        and title = #&#123;title&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">when</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">when</span> <span class="attr">test</span>=<span class="string">"content != null"</span>&gt;</span></span><br><span class="line">        and content = #&#123;content&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">when</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">otherwise</span>&gt;</span></span><br><span class="line">        and owner = "owner1"</span><br><span class="line">    <span class="tag">&lt;/<span class="name">otherwise</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">choose</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-        
-          <a class="article-more-a" href="/2018/03/15/DB/mybatis-chose-when条件的坑.html#more">阅读全文 >></a>
+          <a class="article-more-a" href="/2018/12/05/java/浅入Java-ClassLoader.html#more">阅读全文 >></a>
         
       
 
@@ -264,400 +191,28 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">mybatis</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-分布式/Redis单个key存储的value很大" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/09/分布式/Redis单个key存储的value很大.html">Redis单个key存储的value很大</a>
-    </h1>
-  
-
-        
-        <a href="/2018/03/09/分布式/Redis单个key存储的value很大.html" class="archive-article-date">
-  	<time datetime="2018-03-09T06:53:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-09</time>
-</a>
-        
-      </header>
-    
-
-    <!-- 目录内容 -->
-
-<!-- 目录内容结束 -->
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Redis使用过程中经常会有各种大key的情况， 比如：</p>
-<ul>
-<li>单个简单的key存储的value很大</li>
-<li>hash， set，zset，list 中存储过多的元素（以万为单位）<br>由于redis是单线程运行的，如果一次操作的value很大会对整个redis的响应时间造成负面影响，所以，业务上能拆则拆，下面举几个典型的分拆方案。
-        
-          <a class="article-more-a" href="/2018/03/09/分布式/Redis单个key存储的value很大.html#more">阅读全文 >></a>
-        
-      
-
-      
-    </li></ul></div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-分布式/Redis常见问题" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/09/分布式/Redis常见问题.html">Redis常见问题</a>
-    </h1>
-  
-
-        
-        <a href="/2018/03/09/分布式/Redis常见问题.html" class="archive-article-date">
-  	<time datetime="2018-03-09T04:02:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-09</time>
-</a>
-        
-      </header>
-    
-
-    <!-- 目录内容 -->
-
-<!-- 目录内容结束 -->
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-分布式锁"><a href="#1-分布式锁" class="headerlink" title="1. 分布式锁"></a>1. 分布式锁</h3><p>说道Redis分布式锁，我们的第一印象就是setnx操作。<br>先拿setnx来争抢锁，抢到之后，再用expire给锁加一个过期时间防止锁忘记了释放。但是在setnx之后执行expire之前进程意外crash或者要重启维护了，那会怎么样？<br>
-        
-          <a class="article-more-a" href="/2018/03/09/分布式/Redis常见问题.html#more">阅读全文 >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-运维/Tomcat特殊字符报400" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/07/运维/Tomcat特殊字符报400.html">Tomcat特殊字符报400（The valid characters are defined in RFC 7230 and RFC 3986）</a>
-    </h1>
-  
-
-        
-        <a href="/2018/03/07/运维/Tomcat特殊字符报400.html" class="archive-article-date">
-  	<time datetime="2018-03-07T09:02:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-07</time>
-</a>
-        
-      </header>
-    
-
-    <!-- 目录内容 -->
-
-<!-- 目录内容结束 -->
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Tomcat在 7.0.73, 8.0.39, 8.5.7 等版本后(详情：<a href="https://stackoverflow.com/questions/41053653/tomcat-8-is-not-able-to-handle-get-request-with-in-query-parameters/44005213#44005213)，添加了对于http头的验证,就是添加了些规则去限制HTTP头的规范性(详情：http://www.jianshu.com/p/1c870461fa41)" target="_blank" rel="noopener">https://stackoverflow.com/questions/41053653/tomcat-8-is-not-able-to-handle-get-request-with-in-query-parameters/44005213#44005213)，添加了对于http头的验证,就是添加了些规则去限制HTTP头的规范性(详情：http://www.jianshu.com/p/1c870461fa41)</a><br>
-        
-          <a class="article-more-a" href="/2018/03/07/运维/Tomcat特殊字符报400.html#more">阅读全文 >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">运维</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-java/使用Jedis在高并发报错-java-net-SocketException-Connection-reset-by-peer-socket-write-error" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/01/17/java/使用Jedis在高并发报错-java-net-SocketException-Connection-reset-by-peer-socket-write-error.html">使用Jedis在高并发报错 (java.net.SocketException: Connection reset by peer: socket write error)</a>
-    </h1>
-  
-
-        
-        <a href="/2018/01/17/java/使用Jedis在高并发报错-java-net-SocketException-Connection-reset-by-peer-socket-write-error.html" class="archive-article-date">
-  	<time datetime="2018-01-17T06:29:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-17</time>
-</a>
-        
-      </header>
-    
-
-    <!-- 目录内容 -->
-
-<!-- 目录内容结束 -->
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Connection reset by peer: socket write error错误分析：<br>常出现的Connection reset by peer: 原因可能是多方面的，不过更常见的原因是：<br>①：服务器的并发连接数超过了其承载量，服务器会将其中一些连接Down掉；<br>②：客户关掉了浏览器，而服务器还在给客户端发送数据；<br>③：浏览器端按了Stop<br>
-        
-          <a class="article-more-a" href="/2018/01/17/java/使用Jedis在高并发报错-java-net-SocketException-Connection-reset-by-peer-socket-write-error.html#more">阅读全文 >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">jedis</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-java/Spring-AOP中pointcut-expression表达式解析-及匹配多个条件" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/01/15/java/Spring-AOP中pointcut-expression表达式解析-及匹配多个条件.html">Spring AOP中pointcut expression表达式解析 及匹配多个条件</a>
-    </h1>
-  
-
-        
-        <a href="/2018/01/15/java/Spring-AOP中pointcut-expression表达式解析-及匹配多个条件.html" class="archive-article-date">
-  	<time datetime="2018-01-15T13:59:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-15</time>
-</a>
-        
-      </header>
-    
-
-    <!-- 目录内容 -->
-
-<!-- 目录内容结束 -->
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="Spring-AOP中pointcut-expression表达式解析-及匹配多个条件"><a href="#Spring-AOP中pointcut-expression表达式解析-及匹配多个条件" class="headerlink" title="Spring AOP中pointcut expression表达式解析 及匹配多个条件"></a>Spring AOP中pointcut expression表达式解析 及匹配多个条件</h2><p>任意公共方法的执行：<br>　　execution(public <em> </em>(..))<br>任何一个以“set”开始的方法的执行：<br>　　execution(<em> set</em>(..))<br>AccountService 接口的任意方法的执行：<br>　　execution(<em> com.xyz.service.AccountService.</em>(..))<br>定义在service包里的任意方法的执行：<br>　　execution(<em> com.xyz.service.</em>.<em>(..))<br>定义在service包和所有子包里的任意类的任意方法的执行：<br>　　execution(</em> com.xyz.service..<em>.</em>(..))<br>定义在pointcutexp包和所有子包里的JoinPointObjP2类的任意方法的执行：<br>　　execution(<em> com.test.spring.aop.pointcutexp..JoinPointObjP2.</em>(..))”)<br>在多个表达式之间使用 ||,or表示 或，使用 &amp;&amp;,and表示 与，！表示 非.例如：<br>
-        
-          <a class="article-more-a" href="/2018/01/15/java/Spring-AOP中pointcut-expression表达式解析-及匹配多个条件.html#more">阅读全文 >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">AOP</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">JVM</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Spring</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">classloader</a>
         		</li>
       		
 		</ul>
 	</div>
 
       
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/java//" class="article-tag-list-link color5">java</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
 
       
 
@@ -687,20 +242,20 @@
 
 
   
-    <article id="post-java/jvm参数配置笔记" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+    <article id="post-java/CMS学习笔记" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/01/15/java/jvm参数配置笔记.html">jvm参数配置笔记</a>
+      <a class="article-title" href="/2018/12/04/java/CMS学习笔记.html">CMS学习笔记</a>
     </h1>
   
 
         
-        <a href="/2018/01/15/java/jvm参数配置笔记.html" class="archive-article-date">
-  	<time datetime="2018-01-15T10:25:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-15</time>
+        <a href="/2018/12/04/java/CMS学习笔记.html" class="archive-article-date">
+  	<time datetime="2018-12-04T15:06:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-04</time>
 </a>
         
       </header>
@@ -711,14 +266,17 @@
 <!-- 目录内容结束 -->
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="1、堆设置（这里是重点）"><a href="#1、堆设置（这里是重点）" class="headerlink" title="1、堆设置（这里是重点）"></a>1、堆设置（这里是重点）</h3><p>-Xms:初始堆大小<br>-Xmx:最大堆大小<br>-XX:NewSize=n:设置年轻代初始大小<br>-XX:MaxNewSize=n设置年轻代最大大小<br>-Xmn:相当于-XX:NewSize和-XX:MaxNewSize设置为同一个值了，表示永久设置年轻代的大小。当然剩下的就是老年代咯。<br>
+        <h1 id="一-什么是cms及cms的适用场景"><a href="#一-什么是cms及cms的适用场景" class="headerlink" title="一. 什么是cms及cms的适用场景"></a>一. 什么是cms及cms的适用场景</h1><ol>
+<li>CMS ：Mostly-Concurrent收集器，也称并发标记清除收集器（Concurrent Mark-Sweep GC，CMS收集器），它管理新生代的方式与Parallel收集器和Serial收集器相同，而在老年代则是尽可能得并发执行，每个垃圾收集器周期只有2次短停顿。</li>
+<li>CMS的目的： 为了消除Throught收集器和Serial收集器在Full GC周期中的<code>长时间停顿</code>。</li>
+<li>CMS的使用场景：应用需要更快速的响应，不想长时间的停顿，前提条件是你的CPU资源比较丰富的条件下，适合使用CMS收集器。对于实时响应的任务，比如web server类似。
         
-          <a class="article-more-a" href="/2018/01/15/java/jvm参数配置笔记.html#more">阅读全文 >></a>
+          <a class="article-more-a" href="/2018/12/04/java/CMS学习笔记.html#more">阅读全文 >></a>
         
       
 
       
-    </p></div>
+    </li></ol></div>
     <div class="article-info article-info-index">
       
       
@@ -734,6 +292,17 @@
 	</div>
 
       
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/java//" class="article-tag-list-link color5">java</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
 
       
 
@@ -763,20 +332,20 @@
 
 
   
-    <article id="post-运维/Kafka集群搭建步骤" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+    <article id="post-分布式事务初识" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/01/12/运维/Kafka集群搭建步骤.html">Kafka集群搭建步骤</a>
+      <a class="article-title" href="/2018/11/28/分布式事务初识.html">分布式事务初识</a>
     </h1>
   
 
         
-        <a href="/2018/01/12/运维/Kafka集群搭建步骤.html" class="archive-article-date">
-  	<time datetime="2018-01-12T04:05:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-12</time>
+        <a href="/2018/11/28/分布式事务初识.html" class="archive-article-date">
+  	<time datetime="2018-11-28T04:11:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-28</time>
 </a>
         
       </header>
@@ -787,14 +356,21 @@
 <!-- 目录内容结束 -->
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="1-下载kafka-scale编译版本不同，有不同的选择"><a href="#1-下载kafka-scale编译版本不同，有不同的选择" class="headerlink" title="1. 下载kafka(scale编译版本不同，有不同的选择)"></a>1. 下载kafka(scale编译版本不同，有不同的选择)</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">wget https://www.apache.org/dyn/closer.cgi?path=/kafka/1.0.0/kafka_2.11-1.0.0.tgz</span><br><span class="line"><span class="comment">### 解压</span></span><br><span class="line">tar zxvf kafka_2.11-1.0.0.tgz</span><br><span class="line"><span class="comment">### 切换到kafka目录创建日志目录</span></span><br><span class="line"><span class="built_in">cd</span> kafka_2.11-1.0.0</span><br><span class="line">mkdir logs</span><br></pre></td></tr></table></figure>
+        <h1 id="1-数据库事务认知"><a href="#1-数据库事务认知" class="headerlink" title="1. 数据库事务认知"></a>1. 数据库事务认知</h1><p>在开发中，我们常接触的及时数据库事务。但是一般人都知道数据库事务的几个特新ACID:</p>
+<ul>
+<li>原子性(Atomicity)</li>
+<li>一致性( Consistency </li>
+<li>隔离性或独立性(Isolation)</li>
+<li>持久性(Durabilily)  </li>
+</ul>
+<p>但是再往下,比如问到隔离性指的是什么的时候可能就不知道了，或者是知道隔离性是什么但是再问到数据库实现隔离的都有哪些级别，或者是每个级别他们有什么区别的时候可能就不知道了。<br>
         
-          <a class="article-more-a" href="/2018/01/12/运维/Kafka集群搭建步骤.html#more">阅读全文 >></a>
+          <a class="article-more-a" href="/2018/11/28/分布式事务初识.html#more">阅读全文 >></a>
         
       
 
       
-    </div>
+    </p></div>
     <div class="article-info article-info-index">
       
       
@@ -803,11 +379,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Kafka</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">集群</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">分布式事务</a>
         		</li>
       		
 		</ul>
@@ -843,20 +415,20 @@
 
 
   
-    <article id="post-分布式/分布式ID生成方法" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+    <article id="post-运维/点评cat埋点" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/01/07/分布式/分布式ID生成方法.html">分布式ID生成方法</a>
+      <a class="article-title" href="/2018/10/23/运维/点评cat埋点.html">点评cat埋点</a>
     </h1>
   
 
         
-        <a href="/2018/01/07/分布式/分布式ID生成方法.html" class="archive-article-date">
-  	<time datetime="2018-01-07T09:02:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-07</time>
+        <a href="/2018/10/23/运维/点评cat埋点.html" class="archive-article-date">
+  	<time datetime="2018-10-23T01:45:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-23</time>
 </a>
         
       </header>
@@ -867,9 +439,91 @@
 <!-- 目录内容结束 -->
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="1-使用数据库的-auto-increment-来生成全局唯一递增ID"><a href="#1-使用数据库的-auto-increment-来生成全局唯一递增ID" class="headerlink" title="1. 使用数据库的 auto_increment 来生成全局唯一递增ID"></a>1. 使用数据库的 auto_increment 来生成全局唯一递增ID</h3><p><strong>优点：</strong><br>（1）简单，使用数据库已有的功能<br>（2）能够保证唯一性<br>（3）能够保证递增性<br>（4）步长固定<br><strong>缺点：</strong><br>（1）可用性难以保证：数据库常见架构是一主多从+读写分离，生成自增ID是写请求，主库挂了就玩不转了<br>（2）扩展性差，性能有上限：因为写入是单点，数据库主库的写性能决定ID的生成性能上限，并且难以扩展<br><strong>改进方法：</strong><br>（1）增加主库，避免写入单点<br>（2）数据水平切分，保证各主库生成的ID不重复<br><img src="http://upload-images.jianshu.io/upload_images/3353177-636f805740d6e8a3?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+        <h1 id="1-tracing-演进时间线"><a href="#1-tracing-演进时间线" class="headerlink" title="1. tracing 演进时间线"></a>1. tracing 演进时间线</h1><p><img src="/image/tracing/tracingTime.jpg"><br>
         
-          <a class="article-more-a" href="/2018/01/07/分布式/分布式ID生成方法.html#more">阅读全文 >></a>
+          <a class="article-more-a" href="/2018/10/23/运维/点评cat埋点.html#more">阅读全文 >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">cat</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">分布式链路跟踪</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-运维/elk安装x-pack" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/22/运维/elk安装x-pack.html">elk6.x 安装x-pack</a>
+    </h1>
+  
+
+        
+        <a href="/2018/08/22/运维/elk安装x-pack.html" class="archive-article-date">
+  	<time datetime="2018-08-22T05:39:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-22</time>
+</a>
+        
+      </header>
+    
+
+    <!-- 目录内容 -->
+
+<!-- 目录内容结束 -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>注意：安装x-pack的时候一定要停止对应的服务，不然可能出现各种异常报错</p>
+<h2 id="elasticsearch安装x-pack"><a href="#elasticsearch安装x-pack" class="headerlink" title="elasticsearch安装x-pack"></a>elasticsearch安装x-pack</h2><p>切换到es的bin目录<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./elasticsearch-plugin install x-pack</span><br></pre></td></tr></table></figure></p>
+<p>稍等片刻可以安装完毕(很快)，如果不能下载插件的话可以本地安装</p>
+        
+          <a class="article-more-a" href="/2018/08/22/运维/elk安装x-pack.html#more">阅读全文 >></a>
         
       
 
@@ -883,7 +537,397 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">分布式ID</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">-elk</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-java/使用Spring-Boot、Multipartfile上传文件路径错误问题" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/17/java/使用Spring-Boot、Multipartfile上传文件路径错误问题.html">使用Spring Boot、Multipartfile上传文件路径错误问题</a>
+    </h1>
+  
+
+        
+        <a href="/2018/07/17/java/使用Spring-Boot、Multipartfile上传文件路径错误问题.html" class="archive-article-date">
+  	<time datetime="2018-07-17T02:52:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-17</time>
+</a>
+        
+      </header>
+    
+
+    <!-- 目录内容 -->
+
+<!-- 目录内容结束 -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="报错信息："><a href="#报错信息：" class="headerlink" title="报错信息："></a>报错信息：</h2><p>java.io.IOException: java.io.FileNotFoundException: /tmp/tomcat/…/tmp/files/xxx.jpg (No such file or directory)<br>问题源码： transferTo方法报错<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">File file = <span class="keyword">new</span> File(<span class="string">"/tmp/files/"</span>);</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    multipartFile.transferTo(file);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        
+          <a class="article-more-a" href="/2018/07/17/java/使用Spring-Boot、Multipartfile上传文件路径错误问题.html#more">阅读全文 >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Multipartfile</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-运维/ELK-filebeat-kafka-zooKeeper搭建" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/09/运维/ELK-filebeat-kafka-zooKeeper搭建.html">ELK+filebeat+kafka+zooKeeper搭建（单机版）</a>
+    </h1>
+  
+
+        
+        <a href="/2018/05/09/运维/ELK-filebeat-kafka-zooKeeper搭建.html" class="archive-article-date">
+  	<time datetime="2018-05-09T07:54:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-09</time>
+</a>
+        
+      </header>
+    
+
+    <!-- 目录内容 -->
+
+<!-- 目录内容结束 -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本教程中使用的<code>ELK和filebeat</code>版本是 <code>6.2.4</code></p>
+<h2 id="1-elk安装"><a href="#1-elk安装" class="headerlink" title="1. elk安装"></a>1. elk安装</h2><p>关于elk的配置参考我之前的一篇文章，不在累述：<br>elk安装地址：<br><a href="https://jjlu521016.github.io/2018/05/01/springboot-logback-log4j-elk.html#2-elk%E9%85%8D%E7%BD%AE">https://jjlu521016.github.io/2018/05/01/springboot-logback-log4j-elk.html#2-elk%E9%85%8D%E7%BD%AE</a><br>
+        
+          <a class="article-more-a" href="/2018/05/09/运维/ELK-filebeat-kafka-zooKeeper搭建.html#more">阅读全文 >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ELK</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-java/springboot-logback-log4j-elk" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/01/java/springboot-logback-log4j-elk.html">springboot logback(log4j) elk 非集群</a>
+    </h1>
+  
+
+        
+        <a href="/2018/05/01/java/springboot-logback-log4j-elk.html" class="archive-article-date">
+  	<time datetime="2018-05-01T10:06:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-01</time>
+</a>
+        
+      </header>
+    
+
+    <!-- 目录内容 -->
+
+<!-- 目录内容结束 -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>好长时间没有写过blog了。抽时间把很久之前集成的一个简易的elk升级了下<br>本教程使用的软件如下：<br>springboot 2.*<br>jdk8<br>elk 6.2.4(elasticsearch logstash kibana)<br>
+        
+          <a class="article-more-a" href="/2018/05/01/java/springboot-logback-log4j-elk.html#more">阅读全文 >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">elk</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-js/localStorage简单封装设置失效时间" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/24/js/localStorage简单封装设置失效时间.html">localStorage简单封装设置失效时间</a>
+    </h1>
+  
+
+        
+        <a href="/2018/04/24/js/localStorage简单封装设置失效时间.html" class="archive-article-date">
+  	<time datetime="2018-04-24T01:30:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-24</time>
+</a>
+        
+      </header>
+    
+
+    <!-- 目录内容 -->
+
+<!-- 目录内容结束 -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-概述："><a href="#1-概述：" class="headerlink" title="1.概述："></a>1.概述：</h3><p>在客户端存储数据<br>HTML5 提供了两种在客户端存储数据的新方法：</p>
+<ul>
+<li>localStorage - 没有时间限制的数据存储</li>
+<li>sessionStorage - 针对一个 session 的数据存储</li>
+</ul>
+<p>localStorage和cookie 的区别不详细对比，但是localStorage存储数据的时候有一点需要我们注意的。<br>
+        
+          <a class="article-more-a" href="/2018/04/24/js/localStorage简单封装设置失效时间.html#more">阅读全文 >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">localStorage</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-java/jmap命令使用" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/19/java/jmap命令使用.html">jmap命令使用</a>
+    </h1>
+  
+
+        
+        <a href="/2018/04/19/java/jmap命令使用.html" class="archive-article-date">
+  	<time datetime="2018-04-19T08:22:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-19</time>
+</a>
+        
+      </header>
+    
+
+    <!-- 目录内容 -->
+
+<!-- 目录内容结束 -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="查看-JVM-堆内存情况"><a href="#查看-JVM-堆内存情况" class="headerlink" title="查看 JVM 堆内存情况"></a>查看 JVM 堆内存情况</h3><p>如果想分析自己的JAVA Application时，可以使用jmap程序来生成heapdump文例：<br><code>jmap -heap pid</code><br>jmap是JDK自带的一个工具，非常小巧方便，其支持参数如下：<br>    <code>-heap</code>：打印heap空间的概要，这里可以粗略的检验heap空间的使用情况。<br>官网对jmap的解释是:<br>
+        
+          <a class="article-more-a" href="/2018/04/19/java/jmap命令使用.html#more">阅读全文 >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">jvm</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">jmap</a>
         		</li>
       		
 		</ul>
@@ -923,7 +967,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/2/">&laquo; 上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/">下一页 &raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/2/">&laquo; 上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/4/">下一页 &raquo;</a>
   </nav>
 
 
@@ -936,7 +980,7 @@
         <div id="footer-info">
             <div class="footer-left">
                 &copy;
-                2018
+                2019
                     jjlu521016
             </div>
             <!-- <div class="footer-right">
@@ -1012,11 +1056,43 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">elk</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">集群</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">log</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">rabbitmq</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">分布式事务</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">-java -ThreadLocal</a>
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">threadlocal</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">redis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">dubbo</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">jvm</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1032,10 +1108,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">源码</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
               </li>
              
@@ -1045,10 +1117,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">exception</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">dubbo</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1064,10 +1132,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">springboot</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">spring</a>
               </li>
              
@@ -1076,15 +1140,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">jvm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">jmap</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Multipartfile</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1092,7 +1152,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Multipartfile</a>
+                <a href="javascript:void(0)" class="js-tag color3">GC</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1104,19 +1164,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">cordova</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">jquery</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">redis</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1124,15 +1172,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">分布式ID</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Kafka</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">集群</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1148,10 +1188,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">elk</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">cat</a>
               </li>
              
@@ -1160,11 +1196,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">图片加水印</a>
+                <a href="javascript:void(0)" class="js-tag color2">classloader</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">classloader</a>
+                <a href="javascript:void(0)" class="js-tag color4">微服务</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">翻译 </a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">翻译</a>
               </li>
             
             <div class="clearfix"></div>
