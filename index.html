@@ -150,19 +150,19 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-Java并发编程之线程池" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+    <article id="post-java/juc/Java并发编程之线程池" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/18/Java并发编程之线程池.html">Java并发编程之线程池</a>
+      <a class="article-title" href="/2020/06/18/java/juc/Java并发编程之线程池.html">Java并发编程之线程池</a>
     </h1>
   
 
         
-        <a href="/2020/06/18/Java并发编程之线程池.html" class="archive-article-date">
+        <a href="/2020/06/18/java/juc/Java并发编程之线程池.html" class="archive-article-date">
   	<time datetime="2020-06-18T09:19:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-18</time>
 </a>
         
@@ -187,79 +187,10 @@
 <p>线程能共享系统资源，如果同时执行的线程过多，就有可能导致系统资源不足而产生阻塞的情况</p>
 <p>3.<strong>对线程进行一些简单的管理</strong></p>
 <p>比如：延时执行、定时循环执行的策略</p>
-<h2 id="线程池的原理"><a href="#线程池的原理" class="headerlink" title="线程池的原理"></a>线程池的原理</h2><p>在线程池中存在几个概念：</p>
-<p><code>核心线程数</code>指的是线程池的基本大小；</p>
-<p><code>最大线程数</code>指的是，同一时刻线程池中线程的数量最大不能超过该值；</p>
-<p><code>任务队列</code>是当任务较多时，线程池中线程的数量已经达到了核心线程数，这时候就是用任务队列来存储我们提交的任务。 </p>
-<p>与其他池化技术不同的是，线程池是基于<code>生产者-消费者</code>模式来实现的，任务的提交方是生产者，线程池是消费者。当我们需要执行某个任务时，只需要把任务扔到线程池中即可。线程池中执行任务的流程如下图如下。</p>
-<p><img src="/images/2020/06/18/d2a00170-b146-11ea-a314-095877051747.png" alt="image.png"></p>
-<h2 id="ThreadPoolExecutor简介"><a href="#ThreadPoolExecutor简介" class="headerlink" title="ThreadPoolExecutor简介"></a>ThreadPoolExecutor简介</h2><p>ThreadPoolExecutor</p>
-<p>在JUC包下，已经提供了线程池的具体的实现：<code>ThreadPoolExecutor</code>。ThreadPoolExecutor提供了很多的构造方法，其中最复杂的构造方法有7个参数。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public ThreadPoolExecutor(int corePoolSize,</span><br><span class="line">                          int maximumPoolSize,</span><br><span class="line">                          long keepAliveTime,</span><br><span class="line">                          TimeUnit unit,</span><br><span class="line">                          BlockingQueue&lt;Runnable&gt; workQueue,</span><br><span class="line">                          ThreadFactory threadFactory,</span><br><span class="line">                          RejectedExecutionHandler handler) &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p><code>corePoolSize</code>线程池的核心线程数。</p>
-<p>在任务提交到线程池的时候，</p>
-<p>线程数 &lt;= corePoolSize 就会新创建的一个线程来执行任务</p>
-<p>线程数 &gt; corePoolSize 就将任务添加到<code>workQueue</code>中。</p>
-</li>
-<li><p><code>maximumPoolSize</code>：线程池中允许存在的最大线程数量。</p>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">当`workQueue`满了以后，再有新的任务进入到线程池时，会判断再新建一个线程是否会超过maximumPoolSize，</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">如果会超过，则不创建线程，而是执行拒绝策略。</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">如果不会超过maximumPoolSize，则会创建新的线程来执行任务。</span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>keepAliveTime</code>：空闲线程等待工作的超时时间 </li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">当线程池中的线程数量大于corePoolSize时，大于corePoolSize这部分的线程如果没有任务去处理，那么就表示它们是空闲</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">的，这个时候是不允许它们一直存在的，而是允许它们最多空闲一段时间，这段时间就是keepAliveTime，时间的单位就是</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TimeUnit。</span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>unit</code>：空闲线程允许存活时间的单位<br>   <code>TimeUnit</code>是一个枚举值，它可以是纳秒、微妙、毫秒、秒、分、小时、天。</li>
-<li><code>workQueue</code>：任务队列，用来存放任务。该队列的类型是阻塞队列。<pre><code>常用阻塞队列有`ArrayBlockingQueue、LinkedBlockingQueue、SynchronousQueue、PriorityBlockingQueue`等。 
-</code></pre></li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">**关于阻塞队列下面会介绍隐藏的一些坑。**</span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>threadFactory</code>：线程池工厂，用来创建线程。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在实际项目中，为了便于后期排查问题，在创建线程时需要为线程赋予一定的名称</span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>handler</code>：拒绝策略。<br><img src="/images/2020/06/18/e010dcd0-b146-11ea-a314-095877051747.png" alt="image.png"><br>当任务队列已满，线程数量达到maximumPoolSize后，线程池就不会再接收新的任务了，这个时候就需要使用拒绝策略来决定最终是怎么处理这个任务。<code>默认情况下AbortPolicy，表示无法处理新任务，直接抛出异常</code>。在ThreadPoolExecutor类中定义了四个内部类，分别表示四种拒绝策略。我们也可以通过实现<code>RejectExecutionHandler</code>接口来实现自定义的拒绝策略。</li>
-</ul>
-<p><code>AbortPocily</code>：不再接收新任务，直接抛出异常。</p>
-<p><code>CallerRunsPolicy</code>：提交任务的线程自己处理。</p>
-<p><code>DiscardPolicy</code>：不处理，直接丢弃。</p>
-<p><code>DiscardOldestPolicy</code>：丢弃任务队列中排在最前面的任务，并执行当前任务。（排在队列最前面的任务并不一定是在队列中待的时间最长的任务，因为有可能是按照优先级排序的队列）</p>
-<p><strong><code>知识延伸</code></strong>,想深入理解的同学可以看下相关的源码可以加深印象。</p>
-<p><code>dubbo</code>中的线程池继承了<code>ThreadPoolExecutor.AbortPolicy</code>，重写了<code>rejectedExecution</code>方法，并且<code>dubbo</code>线程模型的所有拒绝策略都是使用的<code>AbortPolicyWithReport</code>。</p>
-<p><code>Netty</code>很像JDK中的CallerRunsPolicy，舍不得丢弃任务。不同的是，CallerRunsPolicy是直接在调用者线程执行的任务。而 Netty是新建了一个线程来处理的。</p>
-<p><code>ActiveMq</code>中的策略属于最大努力执行任务型，当触发拒绝策略时，在尝试一分钟的时间重新将任务塞进任务队列，当一分钟超时还没成功时，就抛出异常。</p>
-<h2 id="Executors"><a href="#Executors" class="headerlink" title="Executors"></a>Executors</h2><p>Executors创建返回ThreadPoolExecutor对象的方法共有三种：</p>
-<ul>
-<li>Executors#newCachedThreadPool  创建可缓存的线程池</li>
-<li>Executors#newSingleThreadExecutor 创建单线程的线程池</li>
-<li>Executors#newFixedThreadPool 创建固定长度的线程池</li>
-</ul>
-<p>看过《<a href="https://yq.aliyun.com/attachment/download/?spm=a2c4e.11153940.0.0.49d73524UHXvow&amp;id=5585" target="_blank" rel="noopener"><strong>阿里巴巴开发规范</strong></a>》的都知道，有这么一条</p>
-<p>【强制】线程池不允许使用Executors去创建，而是通过ThreadPoolExecutor的方式。</p>
-<p>下面我们根据相关源码来看下为什么有这条规约。</p>
-<p><code>CachedThreadPool</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">  * corePoolSize =&gt; 0，核心线程池的数量为0</span><br><span class="line">  * maximumPoolSize =&gt; Integer.MAX_VALUE，可以认为最大线程数是无限的</span><br><span class="line">  * keepAliveTime =&gt; 60L</span><br><span class="line">  * unit =&gt; 秒</span><br><span class="line">  * workQueue =&gt; SynchronousQueue</span><br><span class="line">  */</span><br><span class="line">  public static ExecutorService newCachedThreadPool(ThreadFactory threadFactory) &#123;</span><br><span class="line">     return new ThreadPoolExecutor(0, Integer.MAX_VALUE,</span><br><span class="line">                                   60L, TimeUnit.SECONDS,</span><br><span class="line">                                   new SynchronousQueue&lt;Runnable&gt;(),</span><br><span class="line">                                   threadFactory);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-<p>当一个任务提交时，corePoolSize为0不创建核心线程，SynchronousQueue是一个不存储元素的队列，可以理解为队里永远是满的，因此最终会创建非核心线程来执行任务。</p>
-<p>对于非核心线程空闲60s时将被回收。因为Integer.MAX_VALUE非常大 (2^32 -1)，<strong>可以认为是可以无限创建线程的</strong>，在资源有限的情况下容易引起OOM异常</p>
-<p><code>newSingleThreadExecutor</code> </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * corePoolSize =&gt; 1，核心线程池的数量为1</span><br><span class="line"> * maximumPoolSize =&gt; 1，只可以创建一个非核心线程</span><br><span class="line"> * keepAliveTime =&gt; 0L</span><br><span class="line"> * unit =&gt; 秒</span><br><span class="line"> * workQueue =&gt; LinkedBlockingQueue</span><br><span class="line"> */</span><br><span class="line">public static ExecutorService newSingleThreadExecutor(ThreadFactory threadFactory) &#123;</span><br><span class="line">      return new FinalizableDelegatedExecutorService</span><br><span class="line">          (new ThreadPoolExecutor(1, 1,</span><br><span class="line">                                  0L, TimeUnit.MILLISECONDS,</span><br><span class="line">                                  new LinkedBlockingQueue&lt;Runnable&gt;(),</span><br><span class="line">                                  threadFactory));</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<p>当一个任务提交时，首先会创建一个核心线程来执行任务，如果超过核心线程的数量，将会放入队列中，因为<strong>LinkedBlockingQueue是长度为Integer.MAX_VALUE的队列</strong>，可以认为是无界队列，因此往队列中可以插入无限多的任务，在资源有限的时候容易引起OOM异常，因为无界队列，<strong>maximumPoolSize和keepAliveTime参数将无效。</strong></p>
-<p><code>newFixedThreadPool</code> </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">  /**</span><br><span class="line">    * corePoolSize =&gt; 1，核心线程池的数量为1</span><br><span class="line">    * maximumPoolSize =&gt; 1，只可以创建一个非核心线程</span><br><span class="line">    * keepAliveTime =&gt; 0L</span><br><span class="line">    * unit =&gt; 秒</span><br><span class="line">    * workQueue =&gt; LinkedBlockingQueue</span><br><span class="line">    * LinkedBlockingQueue和SingleThreadExecutor类似，唯一的区别就是核心线程数不同，</span><br><span class="line">    * 并且由于使用的是LinkedBlockingQueue，在资源有限的时候容易引起OOM异常</span><br><span class="line">    */</span><br><span class="line">public static ExecutorService newFixedThreadPool(int nThreads, ThreadFactory threadFactory) &#123;</span><br><span class="line">       return new ThreadPoolExecutor(nThreads, nThreads,</span><br><span class="line">                                     0L, TimeUnit.MILLISECONDS,</span><br><span class="line">                                     new LinkedBlockingQueue&lt;Runnable&gt;(),</span><br><span class="line">                                     threadFactory);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-<p>综上所述：</p>
-<p><code>FixedThreadPool</code>和<code>SingleThreadExecutor</code> </p>
-<p>允许的请求队列长度为Integer.MAX_VALUE，可能会堆积大量的请求，从而引起OOM异常</p>
-<p><code>CachedThreadPool</code> </p>
-<p>允许创建的线程数为Integer.MAX_VALUE，可能会创建大量的线程，从而引起OOM异常</p>
-<p>这就是为什么禁止使用Executors去创建线程池，而是推荐自己去创建ThreadPoolExecutor的原因</p>
-
+<h2 id="线程池的原理"><a href="#线程池的原理" class="headerlink" title="线程池的原理"></a>线程池的原理</h2>
+        
+          <a class="article-more-a" href="/2020/06/18/java/juc/Java并发编程之线程池.html#more">阅读全文 >></a>
+        
       
 
       
@@ -737,11 +668,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">微服务</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">翻译 </a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">翻译 </a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">微服务</a>
         		</li>
       		
 		</ul>
@@ -935,11 +866,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">微服务</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">翻译 </a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">翻译 </a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">微服务</a>
         		</li>
       		
 		</ul>
@@ -1285,7 +1216,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">并发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">log</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">dubbo</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1297,19 +1236,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">并发</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">java</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">threadlocal</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">dubbo</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1325,11 +1256,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1353,11 +1284,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">hashmap</a>
+                <a href="javascript:void(0)" class="js-tag color2">spring</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">spring</a>
+                <a href="javascript:void(0)" class="js-tag color3">hashmap</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1369,15 +1300,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">GC</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Multipartfile</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">GC</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1397,19 +1328,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">运维</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">-elk</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">classloader</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1421,11 +1348,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">微服务</a>
+                <a href="javascript:void(0)" class="js-tag color2">classloader</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">翻译 </a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">微服务</a>
               </li>
              
               <li class="article-tag-list-item">
