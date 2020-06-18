@@ -150,6 +150,95 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-运维/kibana-6-2-4-集成sentinl报警" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/07/运维/kibana-6-2-4-集成sentinl报警.html">kibana(6.2.4)集成sentinl报警</a>
+    </h1>
+  
+
+        
+        <a href="/2018/12/07/运维/kibana-6-2-4-集成sentinl报警.html" class="archive-article-date">
+  	<time datetime="2018-12-07T04:49:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-07</time>
+</a>
+        
+      </header>
+    
+
+    <!-- 目录内容 -->
+
+<!-- 目录内容结束 -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-安装"><a href="#1-安装" class="headerlink" title="1. 安装"></a>1. 安装</h1><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kibana_path/bin/kibana-plugin install https://github.com/sirensolutions/sentinl/releases/download/tag-6.2.4/sentinl-v6.2.4.zip</span><br></pre></td></tr></table></figure>
+<p>安装完成之后，重启kibana。在kibana页面可以看到相关的菜单<br><img src="/image/elk/sentinl-dashborad.png"></p>
+<h1 id="2-配置sentinl"><a href="#2-配置sentinl" class="headerlink" title="2. 配置sentinl"></a>2. 配置sentinl</h1><h2 id="2-1-配置邮箱"><a href="#2-1-配置邮箱" class="headerlink" title="2.1 配置邮箱"></a>2.1 配置邮箱</h2><p>在<code>kibana.yml</code>中配置邮箱参数：<br>
+        
+          <a class="article-more-a" href="/2018/12/07/运维/kibana-6-2-4-集成sentinl报警.html#more">阅读全文 >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ELK</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/运维//" class="article-tag-list-link color3">运维</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-运维/Logstash配置文件简述" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -906,82 +995,6 @@
 
 
   
-    <article id="post-java/springboot-logback-log4j-elk" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/01/java/springboot-logback-log4j-elk.html">springboot logback(log4j) elk 非集群</a>
-    </h1>
-  
-
-        
-        <a href="/2018/05/01/java/springboot-logback-log4j-elk.html" class="archive-article-date">
-  	<time datetime="2018-05-01T10:06:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-01</time>
-</a>
-        
-      </header>
-    
-
-    <!-- 目录内容 -->
-
-<!-- 目录内容结束 -->
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>好长时间没有写过blog了。抽时间把很久之前集成的一个简易的elk升级了下<br>本教程使用的软件如下：<br>springboot 2.*<br>jdk8<br>elk 6.2.4(elasticsearch logstash kibana)<br>
-        
-          <a class="article-more-a" href="/2018/05/01/java/springboot-logback-log4j-elk.html#more">阅读全文 >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">elk</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -999,7 +1012,7 @@
         <div id="footer-info">
             <div class="footer-left">
                 &copy;
-                2019
+                2020
                     jjlu521016
             </div>
             <!-- <div class="footer-right">
@@ -1079,6 +1092,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">中间件</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">elk</a>
               </li>
              
@@ -1087,15 +1104,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">rabbitmq</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">log</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">rabbitmq</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">分布式事务</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">并发</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1115,15 +1136,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">oracle</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">mybatis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1139,6 +1160,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Mybatis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">AOP</a>
               </li>
              
@@ -1147,7 +1172,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Mybatis</a>
+                <a href="javascript:void(0)" class="js-tag color3">hashmap</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1159,19 +1184,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">hashmap</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">jedis</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Multipartfile</a>
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+                <a href="javascript:void(0)" class="js-tag color4">Multipartfile</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1187,15 +1208,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Kafka</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">ELK</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">-elk</a>
+                <a href="javascript:void(0)" class="js-tag color1">Kafka</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1203,7 +1220,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">-elk</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">classloader</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1215,19 +1240,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">classloader</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">微服务</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">翻译</a>
+                <a href="javascript:void(0)" class="js-tag color4">翻译 </a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">翻译 </a>
+                <a href="javascript:void(0)" class="js-tag color3">翻译</a>
               </li>
             
             <div class="clearfix"></div>

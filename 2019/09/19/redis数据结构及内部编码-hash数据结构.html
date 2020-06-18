@@ -18,7 +18,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://jjlu521016.github.io/images/2019/09/19/Skip_list_add_element-en.gif">
 <meta property="og:image" content="https://jjlu521016.github.io/images/2019/09/19/24f2c880-dad9-11e9-820b-5b2353445520.png">
-<meta property="og:updated_time" content="2019-09-19T13:05:20.541Z">
+<meta property="og:updated_time" content="2019-09-19T13:07:39.271Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="redis数据结构及内部编码-hash数据结构">
 <meta name="twitter:description" content="更新中…… 前戏skiplist：在讲redis的hash数据结构之前我们先了解下skiplistWikipedia给出的解释如下：跳跃列表(skiplist)是一种数据结构。它允许快速查询一个有序连续元素的数据链表。跳跃列表的平均查找和插入时间复杂度都是O(log n)，优于普通队列的O(n)。通俗的讲就是：跳跃表是一种有序的数据结构，它通过在每个节点中维持多个指向其他节点的指针，从而达到快速访">
@@ -184,7 +184,7 @@
 	<div id="toc-article" class="toc-article">
 	    <span id="toc-close" class="toc-close" title="隐藏导航" onclick="showBtn();">×</span>
 		<strong class="toc-title">文章目录</strong>
-           <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前戏skiplist："><span class="toc-number">1.</span> <span class="toc-text">前戏skiplist：</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis中的skiplist"><span class="toc-number">1.1.</span> <span class="toc-text">Redis中的skiplist</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#skiplist的定义"><span class="toc-number">1.1.1.</span> <span class="toc-text">skiplist的定义</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在redis的源码中，作者为了满身redis的要求，对skiplist进行了修改-："><span class="toc-number">1.2.</span> <span class="toc-text">在redis的源码中，作者为了满身redis的要求，对skiplist进行了修改##：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zskiplist的相关接口-z-set-c"><span class="toc-number">1.3.</span> <span class="toc-text">zskiplist的相关接口(z_set.c)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建一个zskiplist"><span class="toc-number">1.3.1.</span> <span class="toc-text">创建一个zskiplist</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zskiplist插入一个节点"><span class="toc-number">1.3.2.</span> <span class="toc-text">zskiplist插入一个节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zskiplist删除一个节点"><span class="toc-number">1.3.3.</span> <span class="toc-text">zskiplist删除一个节点</span></a></li></ol></li></ol></li></ol>
+           <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前戏skiplist："><span class="toc-number">1.</span> <span class="toc-text">前戏skiplist：</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis中的skiplist"><span class="toc-number">1.1.</span> <span class="toc-text">Redis中的skiplist</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#skiplist的定义"><span class="toc-number">1.1.1.</span> <span class="toc-text">skiplist的定义</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在redis的源码中，作者为了满身redis的要求，对skiplist进行了修改："><span class="toc-number">1.2.</span> <span class="toc-text">在redis的源码中，作者为了满身redis的要求，对skiplist进行了修改：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zskiplist的相关接口-z-set-c"><span class="toc-number">1.3.</span> <span class="toc-text">zskiplist的相关接口(z_set.c)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建一个zskiplist"><span class="toc-number">1.3.1.</span> <span class="toc-text">创建一个zskiplist</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zskiplist插入一个节点"><span class="toc-number">1.3.2.</span> <span class="toc-text">zskiplist插入一个节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zskiplist删除一个节点"><span class="toc-number">1.3.3.</span> <span class="toc-text">zskiplist删除一个节点</span></a></li></ol></li></ol></li></ol>
          </div>
    <script type="text/javascript">
 	function showToc(){
@@ -210,7 +210,7 @@
 <p>在这里我们就不继续深讨这个算法了。</p>
 <h2 id="Redis中的skiplist"><a href="#Redis中的skiplist" class="headerlink" title="Redis中的skiplist"></a>Redis中的skiplist</h2><p>在redis中，</p>
 <h3 id="skiplist的定义"><a href="#skiplist的定义" class="headerlink" title="skiplist的定义"></a>skiplist的定义</h3><p>如下（server.h）：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//注意4.x版本的ZSKIPLIST_MAXLEVEL 还是32</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ZSKIPLIST_MAXLEVEL 64 <span class="comment">/* Should be enough for 2^64 elements */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ZSKIPLIST_P 0.25      <span class="comment">/* Skiplist P = 1/4 */</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* ZSETs use a specialized version of Skiplists */</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> &#123;</span></span><br><span class="line">    <span class="comment">// 成员对象</span></span><br><span class="line">    sds ele;</span><br><span class="line">    <span class="comment">//分值</span></span><br><span class="line">    <span class="keyword">double</span> score;</span><br><span class="line">    <span class="comment">//指向上一个节点,用于zrevrange命令</span></span><br><span class="line">   <span class="comment">// backward变量是特意为zrevrange*系列命令准备的，目的是为了使跳跃表实现反向遍历，普通跳跃表的实现里是非必要的</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">backward</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistLevel</span> &#123;</span></span><br><span class="line">        <span class="comment">//前进指针，指向下一个节点</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">forward</span>;</span></span><br><span class="line">        <span class="comment">//到达后一个节点的跨度(两个相邻节点span为1)</span></span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">long</span> span;</span><br><span class="line">    &#125; level[];<span class="comment">//该节点在各层的信息，柔性数组成员</span></span><br><span class="line">&#125; zskiplistNode;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplist</span> &#123;</span></span><br><span class="line">    <span class="comment">//表头和表尾节点</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">header</span>, *<span class="title">tail</span>;</span></span><br><span class="line">    <span class="comment">// 表中节点的数量</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> length;</span><br><span class="line">    <span class="comment">// 表中层数最大的节点的层数</span></span><br><span class="line">    <span class="keyword">int</span> level;</span><br><span class="line">&#125; zskiplist;</span><br></pre></td></tr></table></figure></p>
-<h2 id="在redis的源码中，作者为了满身redis的要求，对skiplist进行了修改-："><a href="#在redis的源码中，作者为了满身redis的要求，对skiplist进行了修改-：" class="headerlink" title="在redis的源码中，作者为了满身redis的要求，对skiplist进行了修改##："></a>在redis的源码中，作者为了满身redis的要求，对skiplist进行了修改##：</h2><ul>
+<h2 id="在redis的源码中，作者为了满身redis的要求，对skiplist进行了修改："><a href="#在redis的源码中，作者为了满身redis的要求，对skiplist进行了修改：" class="headerlink" title="在redis的源码中，作者为了满身redis的要求，对skiplist进行了修改："></a>在redis的源码中，作者为了满身redis的要求，对skiplist进行了修改：</h2><ul>
 <li>允许重复的 score 值：多个不同的 member 的 score 值可以相同，当score相同时根据member(代码里的ele)的字典序来排名。</li>
 <li>进行对比操作时，不仅要检查 score 值，还要检查 member ：当 score 值可以重复时，单靠 score 值无法判断一个元素的身份，所以需要连 member 域都一并检查才行。</li>
 <li>每个节点都带有一个高度为 1 层的后退指针，用于从表尾方向向表头方向迭代：当执行 ZREVRANGE 或 ZREVRANGEBYSCORE 这类以逆序处理有序集的命令时，就会用到这个属性。</li>
@@ -339,6 +339,15 @@
   
 <nav id="article-nav">
   
+    <a href="/2020/06/18/Java并发编程之线程池.html" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Java并发编程之线程池
+        
+      </div>
+    </a>
+  
   
     <a href="/2019/09/16/redis数据结构及内部编码-string数据结构.html" id="article-nav-older" class="article-nav-link-wrap">
       <div class="article-nav-title">redis数据结构及内部编码-string数据结构</div>
@@ -368,7 +377,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前戏skiplist："><span class="toc-number">1.</span> <span class="toc-text">前戏skiplist：</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis中的skiplist"><span class="toc-number">1.1.</span> <span class="toc-text">Redis中的skiplist</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#skiplist的定义"><span class="toc-number">1.1.1.</span> <span class="toc-text">skiplist的定义</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在redis的源码中，作者为了满身redis的要求，对skiplist进行了修改-："><span class="toc-number">1.2.</span> <span class="toc-text">在redis的源码中，作者为了满身redis的要求，对skiplist进行了修改##：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zskiplist的相关接口-z-set-c"><span class="toc-number">1.3.</span> <span class="toc-text">zskiplist的相关接口(z_set.c)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建一个zskiplist"><span class="toc-number">1.3.1.</span> <span class="toc-text">创建一个zskiplist</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zskiplist插入一个节点"><span class="toc-number">1.3.2.</span> <span class="toc-text">zskiplist插入一个节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zskiplist删除一个节点"><span class="toc-number">1.3.3.</span> <span class="toc-text">zskiplist删除一个节点</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前戏skiplist："><span class="toc-number">1.</span> <span class="toc-text">前戏skiplist：</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis中的skiplist"><span class="toc-number">1.1.</span> <span class="toc-text">Redis中的skiplist</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#skiplist的定义"><span class="toc-number">1.1.1.</span> <span class="toc-text">skiplist的定义</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在redis的源码中，作者为了满身redis的要求，对skiplist进行了修改："><span class="toc-number">1.2.</span> <span class="toc-text">在redis的源码中，作者为了满身redis的要求，对skiplist进行了修改：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zskiplist的相关接口-z-set-c"><span class="toc-number">1.3.</span> <span class="toc-text">zskiplist的相关接口(z_set.c)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建一个zskiplist"><span class="toc-number">1.3.1.</span> <span class="toc-text">创建一个zskiplist</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zskiplist插入一个节点"><span class="toc-number">1.3.2.</span> <span class="toc-text">zskiplist插入一个节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zskiplist删除一个节点"><span class="toc-number">1.3.3.</span> <span class="toc-text">zskiplist删除一个节点</span></a></li></ol></li></ol></li></ol>
                     </div>
                 </span>
             </div>
@@ -420,7 +429,7 @@ new Valine({
         <div id="footer-info">
             <div class="footer-left">
                 &copy;
-                2019
+                2020
                     jjlu521016
             </div>
             <!-- <div class="footer-right">
@@ -500,6 +509,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">中间件</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">elk</a>
               </li>
              
@@ -508,15 +521,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">rabbitmq</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">log</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">rabbitmq</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">分布式事务</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">并发</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -536,15 +553,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">oracle</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">mybatis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -560,6 +577,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Mybatis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">AOP</a>
               </li>
              
@@ -568,7 +589,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Mybatis</a>
+                <a href="javascript:void(0)" class="js-tag color3">hashmap</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -580,19 +601,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">hashmap</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">jedis</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Multipartfile</a>
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+                <a href="javascript:void(0)" class="js-tag color4">Multipartfile</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -608,15 +625,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Kafka</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">ELK</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">-elk</a>
+                <a href="javascript:void(0)" class="js-tag color1">Kafka</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -624,7 +637,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">-elk</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">classloader</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -636,19 +657,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">classloader</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">微服务</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">翻译</a>
+                <a href="javascript:void(0)" class="js-tag color4">翻译 </a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">翻译 </a>
+                <a href="javascript:void(0)" class="js-tag color3">翻译</a>
               </li>
             
             <div class="clearfix"></div>
