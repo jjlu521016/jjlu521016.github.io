@@ -150,6 +150,192 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-翻译/微服务/微服务扩展性和高可用-章节1" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/05/14/翻译/微服务/微服务扩展性和高可用-章节1.html">微服务扩展性和高可用-可扩展性、高可用性和性能</a>
+    </h1>
+  
+
+        
+        <a href="/2019/05/14/翻译/微服务/微服务扩展性和高可用-章节1.html" class="archive-article-date">
+  	<time datetime="2019-05-14T04:43:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-14</time>
+</a>
+        
+      </header>
+    
+
+    <!-- 目录内容 -->
+
+<!-- 目录内容结束 -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>原文出处:<a href="https://dzone.com/refcardz/scalability?chapter=1" target="_blank" rel="noopener">https://dzone.com/refcardz/scalability?chapter=1</a></p>
+</blockquote>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><h2 id="可扩展性、高可用性和性能"><a href="#可扩展性、高可用性和性能" class="headerlink" title="可扩展性、高可用性和性能"></a>可扩展性、高可用性和性能</h2><p>术语<code>可扩展性</code>、<code>高可用性</code>、<code>性能</code>和<code>关键任务</code>对于不同的组织或组织内的不同部门来说可能意味着不同的事情。它们经常互换，造成混乱，导致管理不善的期望、实现延迟或不切实际的指标。<br>这里的快速参考为您提供了定义这些术语的工具，以便您的团队能够实现具有良好理解的性能目标的关键任务系统。</p>
+<h2 id="可扩展性"><a href="#可扩展性" class="headerlink" title="可扩展性"></a>可扩展性</h2><p>它是一个系统或应用程序的属性，可以处理更多的工作，或者很容易地进行扩展，以响应对网络、处理数据、数据库访问或日益增长的文件系统资源需求。<br>
+        
+          <a class="article-more-a" href="/2019/05/14/翻译/微服务/微服务扩展性和高可用-章节1.html#more">阅读全文 >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">微服务</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/翻译//" class="article-tag-list-link color3">翻译</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-java/如何在Java中调整垃圾回收（翻译）" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/05/05/java/如何在Java中调整垃圾回收（翻译）.html">如何在Java中调整垃圾回收（翻译）</a>
+    </h1>
+  
+
+        
+        <a href="/2019/05/05/java/如何在Java中调整垃圾回收（翻译）.html" class="archive-article-date">
+  	<time datetime="2019-05-05T05:47:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-05</time>
+</a>
+        
+      </header>
+    
+
+    <!-- 目录内容 -->
+
+<!-- 目录内容结束 -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>原文地址<a href="https://dzone.com/articles/how-to-tune-garbage-collection-in-java" target="_blank" rel="noopener">how-to-tune-garbage-collection-in-java</a><br>由于时间仓促，翻译中会出现很多错误，欢迎校正。<br>我的博客即将同步至腾讯云+社区，邀请大家一同入驻：<a href="https://cloud.tencent.com/developer/support-plan?invite_code=1a81sifihhvfg" target="_blank" rel="noopener">https://cloud.tencent.com/developer/support-plan?invite_code=1a81sifihhvfg</a></p>
+</blockquote>
+<p>  垃圾收集是JVM在不再需要内存时代表应用程序回收内存的机制。从高层来看，它包括查找不再使用的对象，释放与这些对象相关联的内存，偶尔压缩堆以防止内存碎片化。</p>
+<p>  垃圾收集器使用一个或多个线程执行它的工作。但是为了完成跟踪对象引用和在内存中移动对象的工作，需要确保应用程序线程当前没有使用这些对象，举个例子，如果应用程序线程正在使用对象，则对象的内存位置会由于GC而发生更改，这是更坏和不可预测的事情。这就是垃圾收集器在执行某些任务时必须暂停所有应用程序线程的原因。这种暂停有时候被称作 Stop-The-Wolrd(STW)暂停，最小化它们是GC调整的首要关注点，因为它们对Java应用程序的性能会产生巨大影响。</p>
+<h2 id="堆的大小"><a href="#堆的大小" class="headerlink" title="堆的大小"></a>堆的大小</h2><p>垃圾收集优化的第一步是调整堆的大小。这是因为如果堆太小的话，会出现太多的GC来回收内存，这会降低应用程序的总吞吐量。如果堆太大，那么会有更少的GC，但是这些GC需要花费很长时间，响应时间指标会受到影响。并行收集器特别容易受到此问题的影响，因此如果需要大堆和低暂停时间，则应尝试使用G1GC收集器。</p>
+<blockquote>
+<p>备注： 自Java 9以来，Concurrent Mark Sweep（CMS）收集器已被弃用, Shenandoah Garbage Collector垃圾收集器在撰写本文时仍被认为是“实验性的”。因此，如果您运行的是联机交互式应用程序，那么G1GC应该是您的默认选择，如果您运行的是脱机批处理应用程序，那么并行收集器应该是您的第一选择。  </p>
+</blockquote>
+        
+          <a class="article-more-a" href="/2019/05/05/java/如何在Java中调整垃圾回收（翻译）.html#more">阅读全文 >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">GC</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/翻译//" class="article-tag-list-link color3">翻译</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-es集群使用xpack（基于elastic-6-5-4）" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -815,142 +1001,6 @@
 
 
   
-    <article id="post-JedisPool常见问题" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/09/JedisPool常见问题.html">JedisPool常见问题</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/09/JedisPool常见问题.html" class="archive-article-date">
-  	<time datetime="2018-12-09T15:58:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-09</time>
-</a>
-        
-      </header>
-    
-
-    <!-- 目录内容 -->
-
-<!-- 目录内容结束 -->
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li><ol>
-<li>无法从连接池获取到Jedis连接<h2 id="1-1-异常堆栈"><a href="#1-1-异常堆栈" class="headerlink" title="1.1. 异常堆栈"></a>1.1. 异常堆栈</h2>(1) 连接池参数blockWhenExhausted = true(默认)</li>
-</ol>
-</li>
-</ul>
-<p>如果连接池没有可用Jedis连接，会等待maxWaitMillis(毫秒)，依然没有获取到可用Jedis连接，会抛出如下异常：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">redis.clients.jedis.exceptions.JedisConnectionException: Could not get a resource from the pool</span><br><span class="line">    …</span><br><span class="line">Caused by: java.util.NoSuchElementException: Timeout waiting for idle object</span><br><span class="line">    at org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:449)</span><br></pre></td></tr></table></figure></p>
-        
-          <a class="article-more-a" href="/2018/12/09/JedisPool常见问题.html#more">阅读全文 >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Jedis源码解读-JedisPool" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/09/Jedis源码解读-JedisPool.html">Jedis源码解读-JedisPool</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/09/Jedis源码解读-JedisPool.html" class="archive-article-date">
-  	<time datetime="2018-12-09T14:26:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-09</time>
-</a>
-        
-      </header>
-    
-
-    <!-- 目录内容 -->
-
-<!-- 目录内容结束 -->
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="1-什么是对象池"><a href="#1-什么是对象池" class="headerlink" title="1. 什么是对象池"></a>1. 什么是对象池</h1><p>对于一个对象，其生命周期大致可以分为 <code>创建 -&gt; 使用 -&gt; 销毁</code>三大阶段，这个对象的时间是 T1(创建)+T2(使用)+T3(销毁)，<br>对于创建N个对象都需要这个步骤的话，肯定很耗时并且消耗性能的。<br>
-        
-          <a class="article-more-a" href="/2018/12/09/Jedis源码解读-JedisPool.html#more">阅读全文 >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -1060,15 +1110,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">并发</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">log</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">dubbo</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1088,11 +1130,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">dubbo</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">jvm</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">oracle</a>
+                <a href="javascript:void(0)" class="js-tag color3">并发</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1101,6 +1147,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">oracle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1148,19 +1198,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Multipartfile</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">jquery</a>
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">localStorage</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">jquery</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1172,10 +1222,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">运维</a>
               </li>
              
@@ -1184,15 +1230,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">zookeeper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">classloader</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">cat</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">分布式链路跟踪</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">classloader</a>
               </li>
              
               <li class="article-tag-list-item">
